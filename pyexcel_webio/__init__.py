@@ -1,0 +1,148 @@
+import pyexcel as pe
+import sys
+PY2 = sys.version_info[0] == 2
+if PY2:
+    from StringIO import StringIO as BytesIO
+else:
+    from io import BytesIO
+
+    
+FILE_TYPE_MIME_TABLE = {
+    "csv": "text/csv",
+    "tsv": "text/tab-separated-values",
+    "csvz": "application/zip",
+    "tsvz": "application/zip",
+    "ods": "application/vnd.oasis.opendocument.spreadsheet",
+    "xls": "application/vnd.ms-excel",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "xlsm": "application/vnd.ms-excel.sheet.macroenabled.12"
+}
+
+
+class ExcelInput(object):
+    """A generic interface for an excel file to be converted
+
+    The source could be from anywhere, memory or file system
+    """
+    def load_single_sheet(self, file_name, sheet_name=None, **keywords):
+        """Abstract method
+        
+        :param form_field_name: the file field name in the html form for file upload
+        :param sheet_name: For an excel book, there could be multiple sheets. If it is left
+                         unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
+                         *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A sheet object
+        """
+        raise NotImplementedError("Please implement this function")
+
+    def load_book(self, file_name, **keywords):
+        """Abstract method
+        
+        :param form_field_name: the file field name in the html form for file upload
+        :param keywords: additional key words
+        :returns: A instance of :class:`Book`
+        """
+        raise NotImplementedError("Please implement this function")
+        
+    def get_sheet(self, file_name, sheet_name=None, **keywords):
+        """
+        Get a :class:`Sheet` instance from the file
+        
+        :param form_field_name: the file field name in the html form for file upload
+        :param sheet_name: For an excel book, there could be multiple sheets. If it is left
+                         unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
+                         *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A sheet object
+        """
+        return self.load_single_sheet(file_name, sheet_name, **keywords)
+        
+    def get_array(self, file_name, sheet_name=None, **keywords):
+        """
+        Get a list of lists from the file
+        
+        :param form_field_name: the file field name in the html form for file upload
+        :param sheet_name: For an excel book, there could be multiple sheets. If it is left
+                         unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
+                         *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A list of lists
+        """
+        sheet = self.get_sheet(file_name, sheet_name, **keywords)
+        return sheet.to_array()
+
+    def get_dict(self, file_name, sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1, **keywords):
+        """Get a dictionary from the file
+        
+        :param form_field_name: the file field name in the html form for file upload
+        :param sheet_name: For an excel book, there could be multiple sheets. If it is left
+                         unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
+                         *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A dictionary
+        """
+        sheet = self.load_single_sheet(file_name, sheet_name,
+                                        name_columns_by_row=name_columns_by_row,
+                                        name_rows_by_column=name_rows_by_column, **keywords)
+        return sheet.to_dict()
+
+    def get_records(self, file_name, sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1, **keywords):
+        """Get a list of records from the file
+  
+        :param form_field_name: the file field name in the html form for file upload
+        :param sheet_name: For an excel book, there could be multiple sheets. If it is left
+                         unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
+                         *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A list of records
+        """
+        sheet = self.load_single_sheet(file_name, sheet_name,
+                                        name_columns_by_row=name_columns_by_row,
+                                        name_rows_by_column=name_rows_by_column, **keywords)
+        return sheet.to_records()
+
+    def get_book(self, file_name, **keywords):
+        """Get a instance of :class:`Book` from the file
+        :param form_field_name: the file field name in the html form for file upload
+        :param keywords: additional key words
+        :returns: A instance of :class:`Book`
+        """
+        return self.load_book(file_name, **keywords)
+
+    def get_book_dict(self, file_name, **keywords):
+        """Get a dictionary of two dimensional array from the file
+
+        :param form_field_name: the file field name in the html form for file upload
+        :param keywords: additional key words
+        :returns: A dictionary of two dimensional arrays
+        """
+        book = self.get_book(file_name, **keywords)
+        return book.to_dict()
+
+def dumpy_func(content, content_type=None, status=200):
+    return None
+
+ExcelResponse = dumpy_func
+
+def make_response(pyexcel_instance, file_type, status=200):
+    io = BytesIO()
+    pyexcel_instance.save_to_memory(file_type, io)
+    io.seek(0)
+    return ExcelResponse(io.read(), content_type=FILE_TYPE_MIME_TABLE[file_type], status=status)
+
+
+def make_response_from_array(array, file_type, status=200):
+    return make_response(pe.Sheet(array), file_type, status)
+
+    
+def make_response_from_dict(adict, file_type, status=200):
+    return make_response(pe.load_from_dict(adict), file_type, status)
+
+
+def make_response_from_records(records, file_type, status=200):
+    return make_response(pe.load_from_records(records), file_type, status)
+
+
+def make_response_from_book_dict(adict, file_type, status=200):
+    return make_response(pe.Book(adict), file_type, status)
