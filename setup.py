@@ -18,7 +18,7 @@ setup(
     version='0.0.1',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-webio",
-    description='A generic web extension for pyexcel.',
+    description='A generic request and response interface for pyexcel web extensions.',
     install_requires=dependencies,
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     include_package_data=True,
