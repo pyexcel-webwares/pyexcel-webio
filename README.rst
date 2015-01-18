@@ -30,3 +30,4 @@ or clone it and install it::
 Dependencies
 ============
 
+* pyexcel

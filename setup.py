@@ -17,7 +17,7 @@ setup(
     author="C. W.",
     version='0.0.1',
     author_email="wangc_2011@hotmail.com",
-    url="https://github.com/chfw/flask-pyexcel",
+    url="https://github.com/chfw/pyexcel-webio",
     description='A generic web extension for pyexcel.',
     install_requires=dependencies,
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
