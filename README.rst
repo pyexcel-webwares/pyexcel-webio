@@ -45,31 +45,37 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
             extension = filename.split(".")[1]
             return extension, filehandle
     
-        def load_single_sheet(self, field_name=None, sheet_name=None, **keywords):
+        def load_single_sheet(self, field_name=None, sheet_name=None,
+                              **keywords):
             file_type, file_handle = self._get_file_tuple(field_name)
-            return pe.load_from_memory(file_type, file_handle.read(), sheet_name, **keywords)
+            return pe.get_sheet(file_type=file_type,
+                                content=file_handle.read(),
+                                sheet_name=sheet_name,
+                                **keywords)
     
         def load_book(self, field_name=None, **keywords):
             file_type, file_handle = self._get_file_tuple(field_name)
-            return pe.load_book_from_memory(file_type, file_handle.read(), **keywords)
+            return pe.get_book(file_type=file_type,
+                               content=file_handle.read(),
+                               **keywords)
 
 2. Plugin in a response method that has the following signature::
 
-    def your_func(content, content_type=None, status=200):
-        ....
+       def your_func(content, content_type=None, status=200):
+           ....
 
-or a response class has the same signature::
+   or a response class has the same signature::
 
-    class YourClass:
-	    def __init__(self, content, content_type=None, status=200):
-		....
+       class YourClass:
+           def __init__(self, content, content_type=None, status=200):
+           ....
 
-For example, with **Flask**, it is just a few lines::
+   For example, with **Flask**, it is just a few lines::
 
-    from flask import Response
+       from flask import Response
 
 
-    webio.ExcelResponse = Response
+       webio.ExcelResponse = Response
 
 
 3. Then make the proxy for **make_response** series by simply copying the following lines to your extension::

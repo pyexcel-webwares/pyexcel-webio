@@ -140,11 +140,11 @@ class ExcelInput(object):
             book.save_to_database(session, tables)
 
 
-def dumpy_func(content, content_type=None, status=200):
+def dummy_func(content, content_type=None, status=200):
     return None
 
 
-ExcelResponse = dumpy_func
+ExcelResponse = dummy_func
 
 
 def make_response(pyexcel_instance, file_type, status=200, **keywords):

@@ -76,6 +76,11 @@ class TestExceptions:
         result = myinput.get_book_dict(unrelated="foo bar")
         assert result == None
 
+    def test_dummy_function(self):
+        result = webio.dummy_func(None, None)
+        assert result == None
+
+
 # excel inputs
 
 class TestExcelInput:
