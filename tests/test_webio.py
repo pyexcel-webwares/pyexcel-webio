@@ -4,31 +4,80 @@ from pyexcel.ext import webio
 from pyexcel.ext import xls
 from db import Session, Base, Signature, Signature2, engine
 import sys
-
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
+from nose.tools import raises
+    
 
 OUTPUT = "response_test.xls"
     
 
 class TestInput(webio.ExcelInput):
+    """This is sample implementation that read excel source from file"""
     def load_single_sheet(self, filename=None, sheet_name=None, **keywords):
+        """Load a single sheet"""
         return pe.get_sheet(file_name=filename, **keywords)
 
     def load_book(self, filename=None, **keywords):
+        """Load a book"""
         return pe.get_book(file_name=filename, **keywords)
 
+
 def dumpy_response(content, content_type=None, status=200):
+    """A dummy response"""
     f = open(OUTPUT, 'wb')
     f.write(content)
     f.close()
 
 
 webio.ExcelResponse = dumpy_response
-    
-    
+
+
+class TestExceptions:
+    @raises(NotImplementedError)
+    def test_load_single_sheet(self):
+        testinput = webio.ExcelInput()
+        testinput.get_sheet(filename="test") # booom
+
+    @raises(NotImplementedError)
+    def test_load_book(self):
+        testinput = webio.ExcelInput()
+        testinput.get_book(filename="test") # booom
+
+    def test_get_sheet(self):
+        myinput = TestInput()
+        sheet = myinput.get_sheet(unrelated="foo bar")
+        assert sheet == None
+
+    def test_get_array(self):
+        myinput = TestInput()
+        array = myinput.get_array(unrelated="foo bar")
+        assert array == None
+
+    def test_get_dict(self):
+        myinput = TestInput()
+        result = myinput.get_dict(unrelated="foo bar")
+        assert result == None
+
+    def test_get_records(self):
+        myinput = TestInput()
+        result = myinput.get_records(unrelated="foo bar")
+        assert result == None
+
+    def test_get_book(self):
+        myinput = TestInput()
+        result = myinput.get_book(unrelated="foo bar")
+        assert result == None
+
+    def test_get_book_dict(self):
+        myinput = TestInput()
+        result = myinput.get_book_dict(unrelated="foo bar")
+        assert result == None
+
+# excel inputs
+
 class TestExcelInput:
     def setUp(self):
         self.data = [
@@ -103,10 +152,21 @@ class TestExcelInputOnBook:
         assert result["sheet1"] == self.data
         assert result["sheet2"] == self.data1
 
+    def test_save_to_database(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+        self.session = Session()
+        myinput = TestInput()
+        myinput.save_book_to_database(filename=self.testfile, session=self.session, tables=[Signature, Signature2])
+        array = pe.get_array(session=self.session, table=Signature)
+        assert array == self.data
+        array = pe.get_array(session=self.session, table=Signature2)
+        assert array == self.data1
 
     def tearDown(self):
         os.unlink(self.testfile)
 
+## responses
 
 class TestResponse:
     def setUp(self):

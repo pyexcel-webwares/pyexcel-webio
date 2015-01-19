@@ -109,7 +109,8 @@ class ExcelInput(object):
 
     def save_to_database(self, session=None, table=None, sheet_name=None, name_columns_by_row=0, **keywords):
         sheet = self.load_single_sheet(sheet_name=sheet_name, name_columns_by_row=name_columns_by_row, **keywords)
-        sheet.save_to_database(session, table)
+        if sheet:
+            sheet.save_to_database(session, table)
 
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
@@ -135,7 +136,8 @@ class ExcelInput(object):
 
     def save_book_to_database(self, session, tables, **keywords):
         book = self.load_book(**keywords)
-        book.save_to_database(session, tables)
+        if book:
+            book.save_to_database(session, tables)
 
 
 def dumpy_func(content, content_type=None, status=200):
