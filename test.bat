@@ -1,1 +1,1 @@
-nosetests --with-cov --with-doctest --doctest-extension=.rst
+nosetests --with-cov --cov pyexcel_webio --cov tests --with-doctest --doctest-extension=.rst
