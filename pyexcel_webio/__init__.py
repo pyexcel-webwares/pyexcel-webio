@@ -134,7 +134,7 @@ class ExcelInput(object):
         else:
             return None
 
-    def save_book_to_database(self, session, tables, **keywords):
+    def save_book_to_database(self, session=None, tables=None, **keywords):
         book = self.load_book(**keywords)
         if book:
             book.save_to_database(session, tables)
@@ -148,6 +148,22 @@ ExcelResponse = dummy_func
 
 
 def make_response(pyexcel_instance, file_type, status=200, **keywords):
+    """Make a http response from a pyexcel instance of :class:`~pyexcel.Sheet` or :class:`~pyexcel.Book`
+
+    :param pyexcel_instance: pyexcel.Sheet or pyexcel.Book
+    :param file_type: one of the following strings:
+                      
+                      * 'csv'
+                      * 'tsv'
+                      * 'csvz'
+                      * 'tsvz'
+                      * 'xls'
+                      * 'xlsx'
+                      * 'xlsm'
+                      * 'ods'
+                        
+    :param status: unless a different status is to be returned.
+    """
     io = BytesIO()
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
     io.seek(0)
