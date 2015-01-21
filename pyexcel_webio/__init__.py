@@ -148,7 +148,7 @@ ExcelResponse = dummy_func
 
 
 def make_response(pyexcel_instance, file_type, status=200, **keywords):
-    io = BytesIO()
+    io = pe._get_io(file_type)
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
     io.seek(0)
     return ExcelResponse(io.read(), content_type=FILE_TYPE_MIME_TABLE[file_type], status=status)
