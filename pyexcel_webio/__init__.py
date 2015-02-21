@@ -1,3 +1,12 @@
+"""
+    pyexcel.ext.webio
+    ~~~~~~~~~~~~~~~~~~~
+
+    A generic request and response interface for pyexcel web extensions
+
+    :copyright: (c) 2015 by Onni Software Ltd.
+    :license: New BSD License
+"""
 import pyexcel as pe
 import sys
 PY2 = sys.version_info[0] == 2
