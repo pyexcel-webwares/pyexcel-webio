@@ -129,6 +129,7 @@ class TestExcelInput:
         myinput.save_to_database(filename=self.testfile, session=self.session, table=Signature,)
         array = pe.get_array(session=self.session, table=Signature)
         assert array == self.data
+        self.session.close()
 
     def tearDown(self):
         os.unlink(self.testfile)
@@ -167,6 +168,7 @@ class TestExcelInputOnBook:
         assert array == self.data
         array = pe.get_array(session=self.session, table=Signature2)
         assert array == self.data1
+        self.session.close()
 
     def tearDown(self):
         os.unlink(self.testfile)
@@ -212,12 +214,13 @@ class TestResponse:
         Base.metadata.create_all(engine)
         row1 = Signature(X=1,Y=2, Z=3)
         row2 = Signature(X=4, Y=5, Z=6)
-        session =Session()
+        session = Session()
         session.add(row1)
         session.add(row2)
         session.commit()
         webio.make_response_from_a_table(session, Signature, "xls")
         self.verify()
+        session.close()
 
     def verify(self):
         sheet2 = pe.load(OUTPUT)

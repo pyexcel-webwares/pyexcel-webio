@@ -107,8 +107,12 @@ class ExcelInput(object):
         else:
             return None
 
-    def save_to_database(self, session=None, table=None, sheet_name=None, name_columns_by_row=0, **keywords):
-        sheet = self.load_single_sheet(sheet_name=sheet_name, name_columns_by_row=name_columns_by_row, **keywords)
+    def save_to_database(self, session=None, table=None,
+                         sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1, **keywords):
+        sheet = self.load_single_sheet(sheet_name=sheet_name,
+                                       name_columns_by_row=name_columns_by_row,
+                                       name_rows_by_column=name_rows_by_column,
+                                       **keywords)
         if sheet:
             sheet.save_to_database(session, table)
 
