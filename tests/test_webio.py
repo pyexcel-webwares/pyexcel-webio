@@ -46,31 +46,37 @@ class TestExceptions:
         testinput = webio.ExcelInput()
         testinput.get_book(filename="test") # booom
 
+    @raises(IOError)
     def test_get_sheet(self):
         myinput = TestInput()
         sheet = myinput.get_sheet(unrelated="foo bar")
         assert sheet == None
 
+    @raises(IOError)
     def test_get_array(self):
         myinput = TestInput()
         array = myinput.get_array(unrelated="foo bar")
         assert array == None
 
+    @raises(IOError)
     def test_get_dict(self):
         myinput = TestInput()
         result = myinput.get_dict(unrelated="foo bar")
         assert result == None
 
+    @raises(IOError)
     def test_get_records(self):
         myinput = TestInput()
         result = myinput.get_records(unrelated="foo bar")
         assert result == None
 
+    @raises(IOError)
     def test_get_book(self):
         myinput = TestInput()
         result = myinput.get_book(unrelated="foo bar")
         assert result == None
 
+    @raises(IOError)
     def test_get_book_dict(self):
         myinput = TestInput()
         result = myinput.get_book_dict(unrelated="foo bar")
