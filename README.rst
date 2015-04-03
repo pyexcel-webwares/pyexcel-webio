@@ -88,7 +88,12 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
         make_response_from_book_dict
     )
 
+License
+==========
+
+New BSD License
+
 Dependencies
 ============
 
-* pyexcel
+* pyexcel >= 0.1.2
