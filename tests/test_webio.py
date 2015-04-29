@@ -46,37 +46,31 @@ class TestExceptions:
         testinput = webio.ExcelInput()
         testinput.get_book(filename="test") # booom
 
-    @raises(IOError)
     def test_get_sheet(self):
         myinput = TestInput()
         sheet = myinput.get_sheet(unrelated="foo bar")
         assert sheet == None
 
-    @raises(IOError)
     def test_get_array(self):
         myinput = TestInput()
         array = myinput.get_array(unrelated="foo bar")
         assert array == None
 
-    @raises(IOError)
     def test_get_dict(self):
         myinput = TestInput()
         result = myinput.get_dict(unrelated="foo bar")
         assert result == None
 
-    @raises(IOError)
     def test_get_records(self):
         myinput = TestInput()
         result = myinput.get_records(unrelated="foo bar")
         assert result == None
 
-    @raises(IOError)
     def test_get_book(self):
         myinput = TestInput()
         result = myinput.get_book(unrelated="foo bar")
         assert result == None
 
-    @raises(IOError)
     def test_get_book_dict(self):
         myinput = TestInput()
         result = myinput.get_book_dict(unrelated="foo bar")
@@ -228,8 +222,27 @@ class TestResponse:
         self.verify()
         session.close()
 
+    def test_make_response_from_query_sets(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+        row1 = Signature(X=1,Y=2, Z=3)
+        row2 = Signature(X=4, Y=5, Z=6)
+        session = Session()
+        session.add(row1)
+        session.add(row2)
+        session.commit()
+        query_sets=session.query(Signature).filter_by(X=1).all()
+        column_names= ["X", "Y", "Z"]
+        webio.make_response_from_query_sets(query_sets, column_names, "xls")
+        sheet2=pe.get_sheet(file_name=OUTPUT)
+        assert sheet2.to_array() == [
+            ["X", "Y", "Z"],
+            [1, 2, 3]
+        ]
+        session.close()
+
     def verify(self):
-        sheet2 = pe.load(OUTPUT)
+        sheet2 = pe.get_sheet(file_name=OUTPUT)
         assert sheet2.to_array() == self.data
 
     def tearDown(self):

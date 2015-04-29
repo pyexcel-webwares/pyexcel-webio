@@ -53,7 +53,7 @@ class ExcelInput(object):
         :returns: A instance of :class:`Book`
         """
         raise NotImplementedError("Please implement this function")
-        
+
     def get_sheet(self, sheet_name=None, **keywords):
         """
         Get a :class:`Sheet` instance from the file
@@ -116,14 +116,20 @@ class ExcelInput(object):
         else:
             return None
 
-    def save_to_database(self, session=None, table=None,
-                         sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1, **keywords):
-        sheet = self.load_single_sheet(sheet_name=sheet_name,
-                                       name_columns_by_row=name_columns_by_row,
-                                       name_rows_by_column=name_rows_by_column,
-                                       **keywords)
+    def save_to_database(
+            self,
+            session=None, table=None,
+            sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1,
+            field_name=None,
+            **keywords):
+        sheet = self.load_single_sheet(
+            field_name=field_name,
+            sheet_name=sheet_name,
+            name_columns_by_row=name_columns_by_row,
+            name_rows_by_column=name_rows_by_column,
+            **keywords)
         if sheet:
-            sheet.save_to_database(session, table)
+            sheet.save_to_database(session, table, **keywords)
 
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
@@ -147,10 +153,10 @@ class ExcelInput(object):
         else:
             return None
 
-    def save_book_to_database(self, session=None, tables=None, **keywords):
-        book = self.load_book(**keywords)
+    def save_book_to_database(self, session=None, tables=None, field_name=None, **keywords):
+        book = self.load_book(field_name=field_name, **keywords)
         if book:
-            book.save_to_database(session, tables)
+            book.save_to_database(session, tables, **keywords)
 
 
 def dummy_func(content, content_type=None, status=200):
@@ -177,7 +183,7 @@ def make_response(pyexcel_instance, file_type, status=200, **keywords):
                         
     :param status: unless a different status is to be returned.
     """
-    io = pe._get_io(file_type)
+    io = pe.get_io(file_type)
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
     io.seek(0)
     return ExcelResponse(io.read(), content_type=FILE_TYPE_MIME_TABLE[file_type], status=status)
@@ -197,6 +203,11 @@ def make_response_from_records(records, file_type, status=200, **keywords):
 
 def make_response_from_book_dict(adict, file_type, status=200, **keywords):
     return make_response(pe.Book(adict), file_type, status, **keywords)
+
+
+def make_response_from_query_sets(query_sets, column_names, file_type, status=200, **keywords):
+    sheet = pe.get_sheet(query_sets=query_sets, column_names=column_names)
+    return make_response(sheet, file_type, status, **keywords)
 
 
 def make_response_from_a_table(session, table, file_type, status=200, **keywords):

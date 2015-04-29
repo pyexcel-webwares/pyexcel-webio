@@ -9,13 +9,13 @@ with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
 dependencies = [
-    'pyexcel>=0.1.2'
+    'pyexcel>=0.1.5'
 ]
 
 setup(
     name='pyexcel-webio',
     author="C. W.",
-    version='0.0.1',
+    version='0.0.2',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-webio",
     description='A generic request and response interface for pyexcel web extensions.',
