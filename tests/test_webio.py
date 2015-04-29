@@ -126,7 +126,7 @@ class TestExcelInput:
         Base.metadata.create_all(engine)
         self.session = Session()
         myinput = TestInput()
-        myinput.save_to_database(filename=self.testfile, session=self.session, table=Signature,)
+        myinput.save_to_database(filename=self.testfile, session=self.session, table=Signature)
         array = pe.get_array(session=self.session, table=Signature)
         assert array == self.data
         self.session.close()
