@@ -15,7 +15,7 @@ dependencies = [
 setup(
     name='pyexcel-webio',
     author="C. W.",
-    version='0.0.2',
+    version='0.0.3',
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-webio",
     description='A generic request and response interface for pyexcel web extensions.',

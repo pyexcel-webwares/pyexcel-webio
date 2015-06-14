@@ -15,7 +15,7 @@ if PY2:
 else:
     from io import BytesIO
 
-    
+
 FILE_TYPE_MIME_TABLE = {
     "csv": "text/csv",
     "tsv": "text/tab-separated-values",
@@ -35,7 +35,7 @@ class ExcelInput(object):
     """
     def load_single_sheet(self, sheet_name=None, **keywords):
         """Abstract method
-        
+
         :param form_field_name: the file field name in the html form for file upload
         :param sheet_name: For an excel book, there could be multiple sheets. If it is left
                          unspecified, the sheet at index 0 is loaded. For 'csv', 'tsv' file,
@@ -156,6 +156,33 @@ class ExcelInput(object):
         book = self.load_book(**keywords)
         if book:
             book.save_to_database(session, tables, initializers=initializers, mapdicts=mapdicts)
+
+
+
+class ExcelInputInMultiDict(ExcelInput):
+    """ A generic interface for an upload excel file appearing in a dictionary
+    """
+    def get_file_tuple(self, field_name):
+        raise NotImplementedError("Please implement this function")
+
+    def load_single_sheet(self, field_name=None, sheet_name=None, **keywords):
+        file_type, file_handle = self.get_file_tuple(field_name)
+        if file_type is not None and file_handle is not None:
+            return pe.get_sheet(file_type=file_type,
+                                file_content=file_handle.read(),
+                                sheet_name=sheet_name,
+                                **keywords)
+        else:
+            return None
+
+    def load_book(self, field_name=None, **keywords):
+        file_type, file_handle = self.get_file_tuple(field_name)
+        if file_type is not None and file_handle is not None:        
+            return pe.get_book(file_type=file_type,
+                               file_content=file_handle.read(),
+                               **keywords)
+        else:
+            return None
 
 
 def dummy_func(content, content_type=None, status=200):
