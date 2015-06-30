@@ -118,7 +118,8 @@ class ExcelInput(object):
 
     def save_to_database(
             self,
-            session=None, table=None, initializer=None, mapdict=None, 
+            session=None, table=None, initializer=None, mapdict=None,
+            auto_commit=True,
             sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1,
             field_name=None, **keywords):
         sheet = self.load_single_sheet(
@@ -128,7 +129,11 @@ class ExcelInput(object):
             name_rows_by_column=name_rows_by_column,
             **keywords)
         if sheet:
-            sheet.save_to_database(session, table, initializer, mapdict)
+            sheet.save_to_database(session,
+                                   table,
+                                   initializer=initializer,
+                                   mapdict=mapdict,
+                                   auto_commit=auto_commit)
 
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
@@ -152,10 +157,17 @@ class ExcelInput(object):
         else:
             return None
 
-    def save_book_to_database(self, session=None, tables=None, initializers=None, mapdicts=None, **keywords):
+    def save_book_to_database(self,
+                              session=None, tables=None,
+                              initializers=None, mapdicts=None, auto_commit=True,
+                              **keywords):
         book = self.load_book(**keywords)
         if book:
-            book.save_to_database(session, tables, initializers=initializers, mapdicts=mapdicts)
+            book.save_to_database(session,
+                                  tables,
+                                  initializers=initializers,
+                                  mapdicts=mapdicts,
+                                  auto_commit=auto_commit)
 
 
 
