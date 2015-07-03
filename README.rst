@@ -96,4 +96,4 @@ New BSD License
 Dependencies
 ============
 
-* pyexcel >= 0.1.2
+* pyexcel >= 0.1.7

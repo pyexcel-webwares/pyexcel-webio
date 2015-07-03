@@ -8,12 +8,6 @@
     :license: New BSD License
 """
 import pyexcel as pe
-import sys
-PY2 = sys.version_info[0] == 2
-if PY2:
-    from StringIO import StringIO as BytesIO
-else:
-    from io import BytesIO
 
 
 FILE_TYPE_MIME_TABLE = {
@@ -24,7 +18,17 @@ FILE_TYPE_MIME_TABLE = {
     "ods": "application/vnd.oasis.opendocument.spreadsheet",
     "xls": "application/vnd.ms-excel",
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "xlsm": "application/vnd.ms-excel.sheet.macroenabled.12"
+    "xlsm": "application/vnd.ms-excel.sheet.macroenabled.12",
+    "json": "application/json",
+    "plain": "text/plain",
+    "simple": "text/plain",
+    "grid": "text/plain",
+    "pipe": "text/plain",
+    "orgtbl": "text/plain",
+    "rst": "text/plain",
+    "mediawiki": "text/plain",
+    "latex": "application/x-latex",
+    "latex_booktabs": "application/x-latex"
 }
 
 

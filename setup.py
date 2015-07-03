@@ -9,7 +9,7 @@ with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
 dependencies = [
-    'pyexcel>=0.1.5'
+    'pyexcel>=0.1.7'
 ]
 
 setup(
@@ -26,7 +26,7 @@ setup(
     zip_safe=False,
     tests_require=['nose'],
     keywords=['API', 'pyexcel', 'Excel', 'HTTP'],
-    license='GNU GPLv3 or BSD',
+    license='BSD',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
