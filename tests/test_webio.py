@@ -25,6 +25,12 @@ class TestInput(webio.ExcelInput):
         return pe.get_book(file_name=filename, **keywords)
 
 
+class TestExtendedInput(webio.ExcelInputInMultiDict):
+    """This is sample implementation that read excel source from file"""
+    def get_file_tuple(self, field_name):
+        return field_name
+
+
 def dumpy_response(content, content_type=None, status=200):
     """A dummy response"""
     f = open(OUTPUT, 'wb')
@@ -45,6 +51,11 @@ class TestExceptions:
     def test_load_book(self):
         testinput = webio.ExcelInput()
         testinput.get_book(filename="test") # booom
+
+    @raises(NotImplementedError)
+    def test_excel_input_get_file_tuple(self):
+        testinput = webio.ExcelInputInMultiDict()
+        testinput.get_file_tuple(field_name="test") # booom
 
     def test_get_sheet(self):
         myinput = TestInput()
@@ -82,7 +93,6 @@ class TestExceptions:
 
 
 # excel inputs
-
 class TestExcelInput:
     def setUp(self):
         self.data = [
@@ -134,6 +144,27 @@ class TestExcelInput:
     def tearDown(self):
         os.unlink(self.testfile)
 
+class TestExcelInput2:
+    def setUp(self):
+        self.data = [
+            ["X", "Y", "Z"],
+            [1, 2, 3],
+            [4, 5, 6]
+        ]
+        sheet = pe.Sheet(self.data)
+        self.testfile = "testfile.xls"
+        sheet.save_as(self.testfile)
+
+    def tearDown(self):
+        os.unlink(self.testfile)
+
+    def test_get_sheet(self):
+        myinput = TestExtendedInput()
+        f = open(self.testfile, 'rb')
+        sheet = myinput.get_sheet(field_name=('xls', f))
+        assert sheet.to_array() == self.data
+        f.close()
+
 
 class TestExcelInputOnBook:
     def setUp(self):
@@ -173,8 +204,28 @@ class TestExcelInputOnBook:
     def tearDown(self):
         os.unlink(self.testfile)
 
-## responses
 
+class TestExcelInput2OnBook:
+    def setUp(self):
+        self.data = [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]
+        self.data1 = [['A', 'B', 'C'], [1, 2, 3], [4, 5, 6]]
+        mydict = OrderedDict()
+        mydict.update({'sheet1': self.data})
+        mydict.update({'sheet2': self.data1})
+        book = pe.Book(mydict)
+        self.testfile = "testfile.xls"
+        book.save_as(self.testfile)
+
+    def test_get_book(self):
+        myinput = TestExtendedInput()
+        f = open(self.testfile,'rb')
+        result = myinput.get_book(field_name=('xls', f))
+        assert result["sheet1"].to_array() == self.data
+        assert result["sheet2"].to_array() == self.data1
+        f.close()
+
+
+## responses
 class TestResponse:
     def setUp(self):
         self.data = [
