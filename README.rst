@@ -27,6 +27,21 @@ or clone it and install it::
     $ python setup.py install
 
 
+Known extensions
+=======================
+
+============== ============================
+framework      plugin/middleware/extension
+============== ============================
+Flask          `Flask-Excel`_
+Django         `django-excel`_
+Pyramid        `pyramid-excel`_
+============== ============================
+
+.. _Flask-Excel: https://github.com/chfw/Flask-Excel
+.. _django-excel: https://github.com/chfw/django-excel
+.. _pyramid-excel: https://github.com/chfw/pyramid-excel
+
 Usage
 =========
 
