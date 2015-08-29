@@ -33,7 +33,7 @@ FILE_TYPE_MIME_TABLE = {
 
 
 class ExcelInput(object):
-    """A generic interface for an excel file to be converted
+    """A generic interface for an excel file input
 
     The source could be from anywhere, memory or file system
     """
@@ -133,6 +133,15 @@ class ExcelInput(object):
             auto_commit=True,
             sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1,
             field_name=None, **keywords):
+        """
+        Save data from a sheet to database
+        
+        :param session: a SQLAlchemy session						
+        :param table: a database table 
+        :param initializer: a custom table initialization function if you have one
+        :param mapdict: the explicit table column names if your excel data do not have the exact column names
+        :param keywords: additional keywords to :meth:`pyexcel.Sheet.save_to_database`
+        """
         sheet = self.load_single_sheet(
             field_name=field_name,
             sheet_name=sheet_name,
@@ -171,6 +180,16 @@ class ExcelInput(object):
             session=None, tables=None,
             initializers=None, mapdicts=None, auto_commit=True,
             **keywords):
+        """
+        Save a book into database
+        
+        :param session: a SQLAlchemy session
+        :param tables: a list of database tables
+        :param initializers: a list of model initialization functions.
+        :param mapdicts: a list of explicit table column names if your excel data sheets do not have the exact column names
+        :param keywords: additional keywords to :meth:`pyexcel.Book.save_to_database`
+
+        """
         book = self.load_book(**keywords)
         if book:
             book.save_to_database(session,
@@ -184,9 +203,18 @@ class ExcelInputInMultiDict(ExcelInput):
     """ A generic interface for an upload excel file appearing in a dictionary
     """
     def get_file_tuple(self, field_name):
+        """
+        Abstract method to get the file tuple
+
+        It is expected to return file type and a file handle to the
+        uploaded file
+        """
         raise NotImplementedError("Please implement this function")
 
     def load_single_sheet(self, field_name=None, sheet_name=None, **keywords):
+        """
+        Load the single sheet from named form field
+        """
         file_type, file_handle = self.get_file_tuple(field_name)
         if file_type is not None and file_handle is not None:
             return pe.get_sheet(file_type=file_type,
@@ -197,6 +225,9 @@ class ExcelInputInMultiDict(ExcelInput):
             return None
 
     def load_book(self, field_name=None, **keywords):
+        """
+        Load the book from named form field
+        """
         file_type, file_handle = self.get_file_tuple(field_name)
         if file_type is not None and file_handle is not None:
             return pe.get_book(file_type=file_type,
@@ -231,6 +262,7 @@ def make_response(pyexcel_instance, file_type, status=200, **keywords):
                       * 'ods'
 
     :param status: unless a different status is to be returned.
+    :returns: http response
     """
     io = pe.get_io(file_type)
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
@@ -243,6 +275,14 @@ def make_response(pyexcel_instance, file_type, status=200, **keywords):
 def make_response_from_array(array,
                              file_type, status=200,
                              **keywords):
+    """
+    Make a http response from an array
+    
+    :param array: a list of lists
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: http response
+    """
     return make_response(pe.Sheet(array),
                          file_type, status, **keywords)
 
@@ -250,6 +290,14 @@ def make_response_from_array(array,
 def make_response_from_dict(adict,
                             file_type, status=200,
                             **keywords):
+    """
+    Make a http response from a dictionary of lists
+    
+    :param dict: a dictinary of lists
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: http response
+    """            
     return make_response(pe.load_from_dict(adict),
                          file_type, status, **keywords)
 
@@ -257,6 +305,14 @@ def make_response_from_dict(adict,
 def make_response_from_records(records,
                                file_type, status=200,
                                **keywords):
+    """
+    Make a http response from a list of dictionaries
+    
+    :param records: a list of dictionaries
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: http response            
+    """
     return make_response(pe.load_from_records(records),
                          file_type, status, **keywords)
 
@@ -264,12 +320,32 @@ def make_response_from_records(records,
 def make_response_from_book_dict(adict,
                                  file_type, status=200,
                                  **keywords):
+    """
+    Make a http response from a dictionary of two dimensional
+    arrays
+
+    :param book_dict: a dictionary of two dimensional arrays
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: http response
+    """
     return make_response(pe.Book(adict), file_type, status, **keywords)
 
 
 def make_response_from_query_sets(query_sets, column_names,
                                   file_type, status=200,
                                   **keywords):
+    """
+    Make a http response from a dictionary of two dimensional
+    arrays
+
+    :param query_sets: a query set
+    :param column_names: a nominated column names. It could not be N
+                         one, otherwise no data is returned.
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: a http response
+    """
     sheet = pe.get_sheet(query_sets=query_sets, column_names=column_names)
     return make_response(sheet, file_type, status, **keywords)
 
@@ -277,6 +353,15 @@ def make_response_from_query_sets(query_sets, column_names,
 def make_response_from_a_table(session, table,
                                file_type, status=200,
                                **keywords):
+    """
+    Make a http response from sqlalchmey table
+
+    :param session: SQLAlchemy session
+    :param table: a SQLAlchemy table
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: a http response
+    """
     sheet = pe.get_sheet(session=session, table=table, **keywords)
     return make_response(sheet, file_type, status, **keywords)
 
@@ -284,5 +369,14 @@ def make_response_from_a_table(session, table,
 def make_response_from_tables(session, tables,
                               file_type, status=200,
                               **keywords):
+    """
+    Make a http response from sqlalchmy tables
+    
+    :param session: SQLAlchemy session
+    :param tables: SQLAlchemy tables
+    :param file_type: same as :meth:`~pyexcel_webio.make_response`
+    :param status: same as :meth:`~pyexcel_webio.make_response`
+    :returns: a http response
+    """
     book = pe.get_book(session=session, tables=tables, **keywords)
     return make_response(book, file_type, status, **keywords)

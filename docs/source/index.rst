@@ -10,8 +10,10 @@ API Reference
 
 .. automodule:: pyexcel_webio
 
-Input
----------
+Excel file upload
+----------------------
+
+Here are the api for processing excel file upload
 
 .. autoclass:: pyexcel_webio.ExcelInput
    :members:
@@ -19,8 +21,11 @@ Input
 .. autoclass:: pyexcel_webio.ExcelInputInMultiDict
    :members:
 
-Output
------------
+Excel file download
+------------------------
+
+Here are the api for converted different data structure into a excel file
+download.
 
 .. autofunction:: pyexcel_webio.make_response
 
