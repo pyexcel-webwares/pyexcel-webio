@@ -297,8 +297,9 @@ def make_response_from_dict(adict,
     :param file_type: same as :meth:`~pyexcel_webio.make_response`
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
-    """            
-    return make_response(pe.load_from_dict(adict),
+    """
+    sheet = pe.get_sheet(adict=adict)
+    return make_response(sheet,
                          file_type, status, **keywords)
 
 
@@ -313,7 +314,8 @@ def make_response_from_records(records,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response            
     """
-    return make_response(pe.load_from_records(records),
+    sheet = pe.get_sheet(records=records)
+    return make_response(sheet,
                          file_type, status, **keywords)
 
 
@@ -329,7 +331,8 @@ def make_response_from_book_dict(adict,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    return make_response(pe.Book(adict), file_type, status, **keywords)
+    book = pe.get_book(bookdict=adict)
+    return make_response(book, file_type, status, **keywords)
 
 
 def make_response_from_query_sets(query_sets, column_names,

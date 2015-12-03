@@ -318,7 +318,7 @@ class TestBookResponse:
         self.verify()
 
     def verify(self):
-        book = pe.load_book(OUTPUT)
+        book = pe.get_book(file_name=OUTPUT)
         assert book.to_dict() == self.content
 
     def tearDown(self):
@@ -341,7 +341,7 @@ class TestBookResponseFromDataBase:
         session.add(row4)
         session.commit()
         webio.make_response_from_tables(session, [Signature, Signature2], "xls")
-        book = pe.load_book(OUTPUT)
+        book = pe.get_book(file_name=OUTPUT)
         expected = OrderedDict()
         expected.update({'signature': [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]})
         expected.update({'signature2': [['A', 'B', 'C'], [1, 2, 3], [4, 5, 6]]})
