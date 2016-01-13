@@ -268,6 +268,9 @@ def make_response(pyexcel_instance, file_type,
     io = pe.get_io(file_type)
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
     io.seek(0)
+    if file_name:
+        if not file_name.endswith(file_type):
+            file_name = "%s.%s" % (file_name, file_type)
     return ExcelResponse(io.read(),
                          content_type=FILE_TYPE_MIME_TABLE[file_type],
                          status=status, file_name=file_name)
