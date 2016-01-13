@@ -277,8 +277,7 @@ def make_response(pyexcel_instance, file_type,
 
 
 def make_response_from_array(array, file_type,
-                             status=200, file_name=None,
-                             **keywords):
+                             status=200, **keywords):
     """
     Make a http response from an array
     
@@ -292,8 +291,7 @@ def make_response_from_array(array, file_type,
 
 
 def make_response_from_dict(adict, file_type,
-                            status=200, file_name=None,
-                            **keywords):
+                            status=200, **keywords):
     """
     Make a http response from a dictionary of lists
     
@@ -308,8 +306,7 @@ def make_response_from_dict(adict, file_type,
 
 
 def make_response_from_records(records, file_type,
-                               status=200, file_name=None,
-                               **keywords):
+                               status=200, **keywords):
     """
     Make a http response from a list of dictionaries
     
@@ -340,7 +337,7 @@ def make_response_from_book_dict(adict,
 
 
 def make_response_from_query_sets(query_sets, column_names,
-                                  file_type, status=200, file_name=None,
+                                  file_type, status=200,
                                   **keywords):
     """
     Make a http response from a dictionary of two dimensional
@@ -358,7 +355,7 @@ def make_response_from_query_sets(query_sets, column_names,
 
 
 def make_response_from_a_table(session, table,
-                               file_type, status=200,
+                               file_type, status=200, file_name=None,
                                **keywords):
     """
     Make a http response from sqlalchmey table
@@ -370,7 +367,7 @@ def make_response_from_a_table(session, table,
     :returns: a http response
     """
     sheet = pe.get_sheet(session=session, table=table, **keywords)
-    return make_response(sheet, file_type, status, **keywords)
+    return make_response(sheet, file_type, status, file_name=file_name, **keywords)
 
 
 def make_response_from_tables(session, tables,
@@ -386,4 +383,4 @@ def make_response_from_tables(session, tables,
     :returns: a http response
     """
     book = pe.get_book(session=session, tables=tables, **keywords)
-    return make_response(book, file_type, status, **keywords)
+    return make_response(book, file_type, status, file_name=file_name, **keywords)

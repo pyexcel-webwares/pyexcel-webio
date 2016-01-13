@@ -10,8 +10,8 @@ else:
     from collections import OrderedDict
 from nose.tools import raises
     
-
-OUTPUT = "response_test.xls"
+FILE_NAME = "response_test"
+OUTPUT = "%s.xls" % FILE_NAME
     
 
 class TestInput(webio.ExcelInput):
@@ -31,11 +31,10 @@ class TestExtendedInput(webio.ExcelInputInMultiDict):
         return field_name
 
 
-def dumpy_response(content, content_type=None, status=200):
+def dumpy_response(content, content_type=None, status=200, file_name=None):
     """A dummy response"""
-    f = open(OUTPUT, 'wb')
-    f.write(content)
-    f.close()
+    with open(file_name, 'wb') as f:
+        f.write(content)
 
 
 webio.ExcelResponse = dumpy_response
@@ -236,11 +235,11 @@ class TestResponse:
 
     def test_make_response_from_sheet(self):
         sheet = pe.Sheet(self.data)
-        webio.make_response(sheet, "xls")
+        webio.make_response(sheet, "xls", file_name=FILE_NAME)
         self.verify()
 
     def test_make_response_from_array(self):
-        webio.make_response_from_array(self.data, "xls")
+        webio.make_response_from_array(self.data, "xls", file_name=FILE_NAME)
         self.verify()
 
     def test_make_response_from_records(self):
@@ -248,7 +247,7 @@ class TestResponse:
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
         ]
-        webio.make_response_from_records(records, "xls")
+        webio.make_response_from_records(records, "xls", file_name=FILE_NAME)
         self.verify()
 
     def test_make_response_from_dict(self):
@@ -257,7 +256,7 @@ class TestResponse:
             "Y": [2, 5],
             "Z": [3, 6]
         }
-        webio.make_response_from_dict(adict, "xls")
+        webio.make_response_from_dict(adict, "xls", file_name=FILE_NAME)
         self.verify()
 
     def test_make_response_from_table(self):
@@ -269,7 +268,7 @@ class TestResponse:
         session.add(row1)
         session.add(row2)
         session.commit()
-        webio.make_response_from_a_table(session, Signature, "xls")
+        webio.make_response_from_a_table(session, Signature, "xls", file_name=FILE_NAME)
         self.verify()
         session.close()
 
@@ -284,7 +283,7 @@ class TestResponse:
         session.commit()
         query_sets=session.query(Signature).filter_by(X=1).all()
         column_names= ["X", "Y", "Z"]
-        webio.make_response_from_query_sets(query_sets, column_names, "xls")
+        webio.make_response_from_query_sets(query_sets, column_names, "xls", file_name=FILE_NAME)
         sheet2=pe.get_sheet(file_name=OUTPUT)
         assert sheet2.to_array() == [
             ["X", "Y", "Z"],
@@ -310,11 +309,11 @@ class TestBookResponse:
 
     def test_make_response_from_book(self):
         book = pe.get_book(bookdict=self.content)
-        webio.make_response(book, "xls")
+        webio.make_response(book, "xls", file_name=FILE_NAME)
         self.verify()
 
     def test_make_response_from_book_dict(self):
-        webio.make_response_from_book_dict(self.content, "xls")
+        webio.make_response_from_book_dict(self.content, "xls", file_name=FILE_NAME)
         self.verify()
 
     def verify(self):
@@ -340,7 +339,7 @@ class TestBookResponseFromDataBase:
         session.add(row3)
         session.add(row4)
         session.commit()
-        webio.make_response_from_tables(session, [Signature, Signature2], "xls")
+        webio.make_response_from_tables(session, [Signature, Signature2], "xls", file_name=FILE_NAME)
         book = pe.get_book(file_name=OUTPUT)
         expected = OrderedDict()
         expected.update({'signature': [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]})
