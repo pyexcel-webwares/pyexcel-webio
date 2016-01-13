@@ -2,7 +2,7 @@
 pyexcel-webio
 ==============
 
-.. image:: https://api.travis-ci.org/chfw/pyexcel-webio.png
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.png
     :target: http://travis-ci.org/chfw/pyexcel-webio
 
 .. image:: https://coveralls.io/repos/chfw/pyexcel-webio/badge.png?branch=master 

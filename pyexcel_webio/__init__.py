@@ -237,14 +237,15 @@ class ExcelInputInMultiDict(ExcelInput):
             return None
 
 
-def dummy_func(content, content_type=None, status=200):
+def dummy_func(content, content_type=None, status=200, file_name=None):
     return None
 
 
 ExcelResponse = dummy_func
 
 
-def make_response(pyexcel_instance, file_type, status=200, **keywords):
+def make_response(pyexcel_instance, file_type,
+                  status=200, file_name=None, **keywords):
     """
     Make a http response from a pyexcel instance of
     :class:`~pyexcel.Sheet` or :class:`~pyexcel.Book`
@@ -269,11 +270,11 @@ def make_response(pyexcel_instance, file_type, status=200, **keywords):
     io.seek(0)
     return ExcelResponse(io.read(),
                          content_type=FILE_TYPE_MIME_TABLE[file_type],
-                         status=status)
+                         status=status, file_name=file_name)
 
 
-def make_response_from_array(array,
-                             file_type, status=200,
+def make_response_from_array(array, file_type,
+                             status=200, file_name=None,
                              **keywords):
     """
     Make a http response from an array
@@ -287,8 +288,8 @@ def make_response_from_array(array,
                          file_type, status, **keywords)
 
 
-def make_response_from_dict(adict,
-                            file_type, status=200,
+def make_response_from_dict(adict, file_type,
+                            status=200, file_name=None,
                             **keywords):
     """
     Make a http response from a dictionary of lists
@@ -303,8 +304,8 @@ def make_response_from_dict(adict,
                          file_type, status, **keywords)
 
 
-def make_response_from_records(records,
-                               file_type, status=200,
+def make_response_from_records(records, file_type,
+                               status=200, file_name=None,
                                **keywords):
     """
     Make a http response from a list of dictionaries
@@ -336,7 +337,7 @@ def make_response_from_book_dict(adict,
 
 
 def make_response_from_query_sets(query_sets, column_names,
-                                  file_type, status=200,
+                                  file_type, status=200, file_name=None,
                                   **keywords):
     """
     Make a http response from a dictionary of two dimensional
@@ -370,7 +371,7 @@ def make_response_from_a_table(session, table,
 
 
 def make_response_from_tables(session, tables,
-                              file_type, status=200,
+                              file_type, status=200, file_name=None,
                               **keywords):
     """
     Make a http response from sqlalchmy tables
