@@ -12,10 +12,13 @@ dependencies = [
     'pyexcel>=0.1.7'
 ]
 
+with open("VERSION", "r") as version:
+    version_txt = version.read().rstrip()
+
 setup(
     name='pyexcel-webio',
     author="C. W.",
-    version='0.0.4',
+    version=version_txt,
     author_email="wangc_2011@hotmail.com",
     url="https://github.com/chfw/pyexcel-webio",
     description='A generic request and response interface for pyexcel web extensions.',
