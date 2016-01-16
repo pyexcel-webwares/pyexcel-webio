@@ -3,13 +3,13 @@ pyexcel-webio
 ==============
 
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.png
-    :target: http://travis-ci.org/chfw/pyexcel-webio
+    :target: http://travis-ci.org/pyexcel/pyexcel-webio
 
-.. image:: https://coveralls.io/repos/chfw/pyexcel-webio/badge.png?branch=master 
-    :target: https://coveralls.io/r/chfw/pyexcel-webio?branch=master 
+.. image:: https://codecov.io/github/pyexcel/pyexcel-ods3/coverage.png
+    :target: https://codecov.io/github/pyexcel/pyexcel-ods3
 
 
-**pyexcel-webio** is a tiny interface library to unify the web extensions that uses `pyexcel <https://github.com/chfw/pyexcel>`__ . You may use it to write a web extension for your faviourite Python web framework.
+**pyexcel-webio** is a tiny interface library to unify the web extensions that uses `pyexcel <https://github.com/pyexcel/pyexcel>`__ . You may use it to write a web extension for your faviourite Python web framework.
 
 
 Installation
@@ -22,7 +22,7 @@ You can install it via pip::
 
 or clone it and install it::
 
-    $ git clone http://github.com/chfw/pyexcel-webio.git
+    $ git clone http://github.com/pyexcel/pyexcel-webio.git
     $ cd pyexcel-webio
     $ python setup.py install
 
@@ -38,9 +38,9 @@ Django         `django-excel`_
 Pyramid        `pyramid-excel`_
 ============== ============================
 
-.. _Flask-Excel: https://github.com/chfw/Flask-Excel
-.. _django-excel: https://github.com/chfw/django-excel
-.. _pyramid-excel: https://github.com/chfw/pyramid-excel
+.. _Flask-Excel: https://github.com/pyexcel/Flask-Excel
+.. _django-excel: https://github.com/pyexcel/django-excel
+.. _pyramid-excel: https://github.com/pyexcel/pyramid-excel
 
 Usage
 =========
