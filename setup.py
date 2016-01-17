@@ -9,7 +9,7 @@ with open("README.rst", 'r') as readme:
     README_txt = readme.read()
 
 dependencies = [
-    'pyexcel>=0.1.7'
+    'pyexcel>=0.2.0'
 ]
 
 with open("VERSION", "r") as version:
