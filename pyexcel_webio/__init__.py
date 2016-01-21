@@ -37,7 +37,7 @@ class ExcelInput(object):
 
     The source could be from anywhere, memory or file system
     """
-    def load_single_sheet(self, sheet_name=None, **keywords):
+    def get_params(self, sheet_name=None, **keywords):
         """Abstract method
 
         :param sheet_name: For an excel book, there could be multiple
@@ -49,17 +49,7 @@ class ExcelInput(object):
         """
         raise NotImplementedError("Please implement this function")
 
-    def load_book(self, **keywords):
-        """Abstract method
-
-        :param form_field_name: the file field name in the html
-                                form for file upload
-        :param keywords: additional key words
-        :returns: A instance of :class:`Book`
-        """
-        raise NotImplementedError("Please implement this function")
-
-    def get_sheet(self, sheet_name=None, **keywords):
+    def get_sheet(self, **keywords):
         """
         Get a :class:`Sheet` instance from the file
 
@@ -70,9 +60,10 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A sheet object
         """
-        return self.load_single_sheet(sheet_name=sheet_name, **keywords)
+        params = self.get_params(**keywords)
+        return pe.get_sheet(**params)
 
-    def get_array(self, sheet_name=None, **keywords):
+    def get_array(self, **keywords):
         """
         Get a list of lists from the file
 
@@ -83,13 +74,10 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A list of lists
         """
-        sheet = self.get_sheet(sheet_name=sheet_name, **keywords)
-        if sheet:
-            return sheet.to_array()
-        else:
-            return None
+        params = self.get_params(**keywords)
+        return pe.get_array(**params)
 
-    def get_dict(self, sheet_name=None, name_columns_by_row=0, **keywords):
+    def get_dict(self, **keywords):
         """Get a dictionary from the file
 
         :param sheet_name: For an excel book, there could be multiple
@@ -99,16 +87,12 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A dictionary
         """
-        sheet = self.load_single_sheet(
-            sheet_name=sheet_name,
-            name_columns_by_row=name_columns_by_row,
-            **keywords)
-        if sheet:
-            return sheet.to_dict()
-        else:
-            return None
+        params = self.get_params(**keywords)
+        if 'name_columns_by_row' not in params:
+            params['name_columns_by_row'] = 0
+        return pe.get_dict(**params)
 
-    def get_records(self, sheet_name=None, name_columns_by_row=0, **keywords):
+    def get_records(self, **keywords):
         """Get a list of records from the file
 
         :param sheet_name: For an excel book, there could be multiple
@@ -118,21 +102,16 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A list of records
         """
-        sheet = self.load_single_sheet(
-            sheet_name=sheet_name,
-            name_columns_by_row=name_columns_by_row,
-            **keywords)
-        if sheet:
-            return sheet.to_records()
-        else:
-            return None
+        params = self.get_params(**keywords)
+        if 'name_columns_by_row' not in params:
+            params['name_columns_by_row'] = 0
+        return pe.get_records(**params)
 
     def save_to_database(
             self,
             session=None, table=None, initializer=None, mapdict=None,
             auto_commit=True,
-            sheet_name=None, name_columns_by_row=0, name_rows_by_column=-1,
-            field_name=None, **keywords):
+            **keywords):
         """
         Save data from a sheet to database
         
@@ -142,18 +121,17 @@ class ExcelInput(object):
         :param mapdict: the explicit table column names if your excel data do not have the exact column names
         :param keywords: additional keywords to :meth:`pyexcel.Sheet.save_to_database`
         """
-        sheet = self.load_single_sheet(
-            field_name=field_name,
-            sheet_name=sheet_name,
-            name_columns_by_row=name_columns_by_row,
-            name_rows_by_column=name_rows_by_column,
-            **keywords)
-        if sheet:
-            sheet.save_to_database(session,
-                                   table,
-                                   initializer=initializer,
-                                   mapdict=mapdict,
-                                   auto_commit=auto_commit)
+        params = self.get_params(**keywords)
+        if 'name_columns_by_row' not in params:
+            params['name_columns_by_row'] = 0
+        if 'name_rows_by_column' not in params:
+            params['name_rows_by_column'] = -1
+        params['dest_session']=session
+        params['dest_table'] = table
+        params['dest_initializer']=initializer
+        params['dest_mapdict'] = mapdict
+        params['dest_auto_commit']=auto_commit
+        pe.save_as(**params)
 
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
@@ -161,7 +139,8 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A instance of :class:`Book`
         """
-        return self.load_book(**keywords)
+        params = self.get_params(**keywords)
+        return pe.get_book(**params)
 
     def get_book_dict(self, **keywords):
         """Get a dictionary of two dimensional array from the file
@@ -169,11 +148,8 @@ class ExcelInput(object):
         :param keywords: additional key words
         :returns: A dictionary of two dimensional arrays
         """
-        book = self.load_book(**keywords)
-        if book:
-            return book.to_dict()
-        else:
-            return None
+        params = self.get_params(**keywords)
+        return pe.get_book_dict(**params)
 
     def save_book_to_database(
             self,
@@ -190,13 +166,13 @@ class ExcelInput(object):
         :param keywords: additional keywords to :meth:`pyexcel.Book.save_to_database`
 
         """
-        book = self.load_book(**keywords)
-        if book:
-            book.save_to_database(session,
-                                  tables,
-                                  initializers=initializers,
-                                  mapdicts=mapdicts,
-                                  auto_commit=auto_commit)
+        params = self.get_params(**keywords)
+        params['dest_session']=session
+        params['dest_tables'] = tables
+        params['dest_initializers']=initializers
+        params['dest_mapdicts'] = mapdicts
+        params['dest_auto_commit']=auto_commit
+        pe.save_book_as(**params)
 
 
 class ExcelInputInMultiDict(ExcelInput):
@@ -211,30 +187,19 @@ class ExcelInputInMultiDict(ExcelInput):
         """
         raise NotImplementedError("Please implement this function")
 
-    def load_single_sheet(self, field_name=None, sheet_name=None, **keywords):
+    def get_params(self, field_name=None, **keywords):
         """
         Load the single sheet from named form field
         """
         file_type, file_handle = self.get_file_tuple(field_name)
         if file_type is not None and file_handle is not None:
-            return pe.get_sheet(file_type=file_type,
-                                file_content=file_handle.read(),
-                                sheet_name=sheet_name,
-                                **keywords)
+            keywords = {
+                'file_type': file_type,
+                'file_content': file_handle.read()
+            }
+            return keywords
         else:
-            return None
-
-    def load_book(self, field_name=None, **keywords):
-        """
-        Load the book from named form field
-        """
-        file_type, file_handle = self.get_file_tuple(field_name)
-        if file_type is not None and file_handle is not None:
-            return pe.get_book(file_type=file_type,
-                               file_content=file_handle.read(),
-                               **keywords)
-        else:
-            return None
+            raise Exception("Invalid parameters")
 
 
 def dummy_func(content, content_type=None, status=200, file_name=None):

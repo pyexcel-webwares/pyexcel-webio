@@ -16,13 +16,9 @@ OUTPUT = "%s.xls" % FILE_NAME
 
 class TestInput(webio.ExcelInput):
     """This is sample implementation that read excel source from file"""
-    def load_single_sheet(self, filename=None, sheet_name=None, **keywords):
+    def get_params(self, **keywords):
         """Load a single sheet"""
-        return pe.get_sheet(file_name=filename, **keywords)
-
-    def load_book(self, filename=None, **keywords):
-        """Load a book"""
-        return pe.get_book(file_name=filename, **keywords)
+        return keywords
 
 
 class TestExtendedInput(webio.ExcelInputInMultiDict):
@@ -44,12 +40,12 @@ class TestExceptions:
     @raises(NotImplementedError)
     def test_load_single_sheet(self):
         testinput = webio.ExcelInput()
-        testinput.get_sheet(filename="test") # booom
+        testinput.get_sheet(file_name="test") # booom
 
     @raises(NotImplementedError)
     def test_load_book(self):
         testinput = webio.ExcelInput()
-        testinput.get_book(filename="test") # booom
+        testinput.get_book(file_name="test") # booom
 
     @raises(NotImplementedError)
     def test_excel_input_get_file_tuple(self):
@@ -105,17 +101,17 @@ class TestExcelInput:
 
     def test_get_sheet(self):
         myinput = TestInput()
-        sheet = myinput.get_sheet(filename=self.testfile)
+        sheet = myinput.get_sheet(file_name=self.testfile)
         assert sheet.to_array() == self.data
 
     def test_get_array(self):
         myinput = TestInput()
-        array = myinput.get_array(filename=self.testfile)
+        array = myinput.get_array(file_name=self.testfile)
         assert array == self.data
 
     def test_get_dict(self):
         myinput = TestInput()
-        result = myinput.get_dict(filename=self.testfile)
+        result = myinput.get_dict(file_name=self.testfile)
         assert result == {
             "X": [1, 4],
             "Y": [2, 5],
@@ -124,7 +120,7 @@ class TestExcelInput:
 
     def test_get_records(self):
         myinput = TestInput()
-        result = myinput.get_records(filename=self.testfile)
+        result = myinput.get_records(file_name=self.testfile)
         assert result == [
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
@@ -135,7 +131,7 @@ class TestExcelInput:
         Base.metadata.create_all(engine)
         self.session = Session()
         myinput = TestInput()
-        myinput.save_to_database(filename=self.testfile, session=self.session, table=Signature)
+        myinput.save_to_database(file_name=self.testfile, session=self.session, table=Signature)
         array = pe.get_array(session=self.session, table=Signature)
         assert array == self.data
         self.session.close()
@@ -178,13 +174,13 @@ class TestExcelInputOnBook:
 
     def test_get_book(self):
         myinput = TestInput()
-        result = myinput.get_book(filename=self.testfile)
+        result = myinput.get_book(file_name=self.testfile)
         assert result["sheet1"].to_array() == self.data
         assert result["sheet2"].to_array() == self.data1
 
     def test_get_book_dict(self):
         myinput = TestInput()
-        result = myinput.get_book_dict(filename=self.testfile)
+        result = myinput.get_book_dict(file_name=self.testfile)
         assert result["sheet1"] == self.data
         assert result["sheet2"] == self.data1
 
@@ -193,7 +189,7 @@ class TestExcelInputOnBook:
         Base.metadata.create_all(engine)
         self.session = Session()
         myinput = TestInput()
-        myinput.save_book_to_database(filename=self.testfile, session=self.session, tables=[Signature, Signature2])
+        myinput.save_book_to_database(file_name=self.testfile, session=self.session, tables=[Signature, Signature2])
         array = pe.get_array(session=self.session, table=Signature)
         assert array == self.data
         array = pe.get_array(session=self.session, table=Signature2)
