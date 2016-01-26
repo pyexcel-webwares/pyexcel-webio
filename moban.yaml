@@ -1,0 +1,8 @@
+overrides: "pyexcel.yaml"
+name: "pyexcel-webio"
+nick_name: webio
+version: 0.0.6
+dependencies:
+  - pyexcel>=0.2.0
+description: |
+  A generic request and response interface for pyexcel web extensions.

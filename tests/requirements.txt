@@ -3,6 +3,5 @@ rednose
 nose-cov
 codecov
 coverage
-pyexcel-xls>=0.1.0
-pyexcel>=0.2.0
 SQLAlchemy
+pyexcel-xls>=0.1.0

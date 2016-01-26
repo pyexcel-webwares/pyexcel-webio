@@ -1,0 +1,5 @@
+{% extends 'tests/requirements.txt.jj2' %}
+{%block extras %}
+SQLAlchemy
+pyexcel-xls>=0.1.0
+{%endblock%}
