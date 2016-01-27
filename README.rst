@@ -5,8 +5,8 @@ pyexcel-webio
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.png
     :target: http://travis-ci.org/pyexcel/pyexcel-webio
 
-.. image:: https://codecov.io/github/pyexcel/pyexcel-ods3/coverage.png
-    :target: https://codecov.io/github/pyexcel/pyexcel-ods3
+.. image:: https://codecov.io/github/pyexcel/pyexcel-webio/coverage.png
+    :target: https://codecov.io/github/pyexcel/pyexcel-webio
 
 
 **pyexcel-webio** is a tiny interface library to unify the web extensions that uses `pyexcel <https://github.com/pyexcel/pyexcel>`__ . You may use it to write a web extension for your faviourite Python web framework.
