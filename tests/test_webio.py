@@ -55,17 +55,17 @@ class TestExceptions:
     @raises(NotImplementedError)
     def test_get_sheet(self):
         myinput = TestInput()
-        sheet = myinput.get_sheet(unrelated="foo bar")
+        myinput.get_sheet(unrelated="foo bar")
 
     @raises(NotImplementedError)
     def test_get_array(self):
         myinput = TestInput()
-        array = myinput.get_array(unrelated="foo bar")
+        myinput.get_array(unrelated="foo bar")
 
     @raises(NotImplementedError)
     def test_get_dict(self):
         myinput = TestInput()
-        result = myinput.get_dict(unrelated="foo bar")
+        myinput.get_dict(unrelated="foo bar")
 
     @raises(NotImplementedError)
     def test_get_records(self):
@@ -159,6 +159,11 @@ class TestExcelInput2:
         sheet = myinput.get_sheet(field_name=('xls', f))
         assert sheet.to_array() == self.data
         f.close()
+
+    @raises(Exception)
+    def test_wrong_file_tuple_returned(self):
+        myinput = TestExtendedInput()
+        myinput.get_sheet(field_name=('xls', None))
 
 
 class TestExcelInputOnBook:
