@@ -209,6 +209,18 @@ def dummy_func(content, content_type=None, status=200, file_name=None):
 ExcelResponse = dummy_func
 
 
+def _make_response(io_stream, file_type,
+                   status=200, file_name=None):
+    io_stream.seek(0)
+    if file_name:
+        if not file_name.endswith(file_type):
+            file_name = "%s.%s" % (file_name, file_type)
+    return ExcelResponse(io_stream.read(),
+                         content_type=FILE_TYPE_MIME_TABLE[file_type],
+                         status=status, file_name=file_name)
+    
+
+
 def make_response(pyexcel_instance, file_type,
                   status=200, file_name=None, **keywords):
     """
@@ -232,17 +244,11 @@ def make_response(pyexcel_instance, file_type,
     """
     io = pe.get_io(file_type)
     pyexcel_instance.save_to_memory(file_type, io, **keywords)
-    io.seek(0)
-    if file_name:
-        if not file_name.endswith(file_type):
-            file_name = "%s.%s" % (file_name, file_type)
-    return ExcelResponse(io.read(),
-                         content_type=FILE_TYPE_MIME_TABLE[file_type],
-                         status=status, file_name=file_name)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_array(array, file_type,
-                             status=200, **keywords):
+                             status=200, file_name=None, **keywords):
     """
     Make a http response from an array
     
@@ -251,12 +257,12 @@ def make_response_from_array(array, file_type,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    return make_response(pe.Sheet(array),
-                         file_type, status, **keywords)
+    io = pe.save_as(array=array, dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_dict(adict, file_type,
-                            status=200, **keywords):
+                            status=200, file_name=None, **keywords):
     """
     Make a http response from a dictionary of lists
     
@@ -265,13 +271,12 @@ def make_response_from_dict(adict, file_type,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    sheet = pe.get_sheet(adict=adict)
-    return make_response(sheet,
-                         file_type, status, **keywords)
+    io = pe.save_as(adict=adict, dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_records(records, file_type,
-                               status=200, **keywords):
+                               status=200, file_name=None, **keywords):
     """
     Make a http response from a list of dictionaries
     
@@ -280,13 +285,12 @@ def make_response_from_records(records, file_type,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response            
     """
-    sheet = pe.get_sheet(records=records)
-    return make_response(sheet,
-                         file_type, status, **keywords)
+    io = pe.save_as(records=records, dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_book_dict(adict,
-                                 file_type, status=200,
+                                 file_type, status=200, file_name=None,
                                  **keywords):
     """
     Make a http response from a dictionary of two dimensional
@@ -297,12 +301,12 @@ def make_response_from_book_dict(adict,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    book = pe.get_book(bookdict=adict)
-    return make_response(book, file_type, status, **keywords)
+    io = pe.save_book_as(bookdict=adict, dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_query_sets(query_sets, column_names,
-                                  file_type, status=200,
+                                  file_type, status=200, file_name=None,
                                   **keywords):
     """
     Make a http response from a dictionary of two dimensional
@@ -315,8 +319,9 @@ def make_response_from_query_sets(query_sets, column_names,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    sheet = pe.get_sheet(query_sets=query_sets, column_names=column_names)
-    return make_response(sheet, file_type, status, **keywords)
+    io = pe.save_as(query_sets=query_sets, column_names=column_names,
+                    dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_a_table(session, table,
@@ -331,8 +336,9 @@ def make_response_from_a_table(session, table,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    sheet = pe.get_sheet(session=session, table=table, **keywords)
-    return make_response(sheet, file_type, status, file_name=file_name, **keywords)
+    io = pe.save_as(session=session, table=table,
+                    dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
 
 
 def make_response_from_tables(session, tables,
@@ -347,5 +353,5 @@ def make_response_from_tables(session, tables,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    book = pe.get_book(session=session, tables=tables, **keywords)
-    return make_response(book, file_type, status, file_name=file_name, **keywords)
+    io = pe.save_book_as(session=session, tables=tables, dest_file_type=file_type, **keywords)
+    return _make_response(io, file_type, status, file_name)
