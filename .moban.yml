@@ -1,0 +1,14 @@
+configuration:
+  configuration_dir: "commons/config"
+  template_dir:
+    - "commons/templates"
+    - ".moban.d"
+  configuration: pyexcel_webio.yaml
+targets:
+  - setup.py: setup.py
+  - "docs/source/conf.py": "docs/source/conf.py.jj2"
+  - .travis.yml: travis.yml
+  - requirements.txt: requirements.txt
+  - LICENSE: LICENSE.jj2
+  - MANIFEST.in: MANIFEST.in.jj2
+  - .gitignore: .gitignore.jj2
