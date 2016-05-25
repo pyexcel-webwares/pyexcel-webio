@@ -1,9 +1,9 @@
 import os
-import pyexcel as pe
-from pyexcel.ext import webio
-from pyexcel.ext import xls
-from db import Session, Base, Signature, Signature2, engine
 import sys
+from unittest import TestCase
+import pyexcel as pe
+import pyexcel_webio as webio
+from db import Session, Base, Signature, Signature2, engine
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
@@ -166,13 +166,13 @@ class TestExcelInput2:
         myinput.get_sheet(field_name=('xls', None))
 
 
-class TestExcelInputOnBook:
+class TestExcelInputOnBook(TestCase):
     def setUp(self):
         self.data = [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]
         self.data1 = [['A', 'B', 'C'], [1, 2, 3], [4, 5, 6]]
         mydict = OrderedDict()
-        mydict.update({'sheet1': self.data})
-        mydict.update({'sheet2': self.data1})
+        mydict.update({'signature': self.data})
+        mydict.update({'signature2': self.data1})
         book = pe.Book(mydict)
         self.testfile = "testfile.xls"
         book.save_as(self.testfile)
@@ -180,14 +180,14 @@ class TestExcelInputOnBook:
     def test_get_book(self):
         myinput = TestInput()
         result = myinput.get_book(file_name=self.testfile)
-        assert result["sheet1"].to_array() == self.data
-        assert result["sheet2"].to_array() == self.data1
+        assert result["signature"].to_array() == self.data
+        assert result["signature2"].to_array() == self.data1
 
     def test_get_book_dict(self):
         myinput = TestInput()
         result = myinput.get_book_dict(file_name=self.testfile)
-        assert result["sheet1"] == self.data
-        assert result["sheet2"] == self.data1
+        assert result["signature"] == self.data
+        assert result["signature2"] == self.data1
 
     def test_save_to_database(self):
         Base.metadata.drop_all(engine)
@@ -196,7 +196,7 @@ class TestExcelInputOnBook:
         myinput = TestInput()
         myinput.save_book_to_database(file_name=self.testfile, session=self.session, tables=[Signature, Signature2])
         array = pe.get_array(session=self.session, table=Signature)
-        assert array == self.data
+        self.assertEqual(array, self.data)
         array = pe.get_array(session=self.session, table=Signature2)
         assert array == self.data1
         self.session.close()

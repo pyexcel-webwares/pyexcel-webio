@@ -242,8 +242,7 @@ def make_response(pyexcel_instance, file_type,
     :param status: unless a different status is to be returned.
     :returns: http response
     """
-    io = pe.get_io(file_type)
-    pyexcel_instance.save_to_memory(file_type, io, **keywords)
+    io = pyexcel_instance.save_to_memory(file_type, None, **keywords)
     return _make_response(io, file_type, status, file_name)
 
 
