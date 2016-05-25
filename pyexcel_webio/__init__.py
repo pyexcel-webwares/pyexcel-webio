@@ -107,18 +107,18 @@ class ExcelInput(object):
             params['name_columns_by_row'] = 0
         return pe.get_records(**params)
 
-    def save_to_database(
-            self,
-            session=None, table=None, initializer=None, mapdict=None,
-            auto_commit=True,
-            **keywords):
+    def save_to_database(self, session=None, table=None,
+                         initializer=None, mapdict=None,
+                         auto_commit=True,
+                         **keywords):
         """
         Save data from a sheet to database
-        
-        :param session: a SQLAlchemy session						
-        :param table: a database table 
+
+        :param session: a SQLAlchemy session
+        :param table: a database table
         :param initializer: a custom table initialization function if you have one
-        :param mapdict: the explicit table column names if your excel data do not have the exact column names
+        :param mapdict: the explicit table column names if your excel data do not
+                        have the exact column names
         :param keywords: additional keywords to :meth:`pyexcel.Sheet.save_to_database`
         """
         params = self.get_params(**keywords)
@@ -126,11 +126,11 @@ class ExcelInput(object):
             params['name_columns_by_row'] = 0
         if 'name_rows_by_column' not in params:
             params['name_rows_by_column'] = -1
-        params['dest_session']=session
+        params['dest_session'] = session
         params['dest_table'] = table
-        params['dest_initializer']=initializer
+        params['dest_initializer'] = initializer
         params['dest_mapdict'] = mapdict
-        params['dest_auto_commit']=auto_commit
+        params['dest_auto_commit'] = auto_commit
         pe.save_as(**params)
 
     def get_book(self, **keywords):
@@ -151,27 +151,26 @@ class ExcelInput(object):
         params = self.get_params(**keywords)
         return pe.get_book_dict(**params)
 
-    def save_book_to_database(
-            self,
-            session=None, tables=None,
-            initializers=None, mapdicts=None, auto_commit=True,
-            **keywords):
+    def save_book_to_database(self, session=None, tables=None,
+                              initializers=None, mapdicts=None,
+                              auto_commit=True, **keywords):
         """
         Save a book into database
-        
+
         :param session: a SQLAlchemy session
         :param tables: a list of database tables
         :param initializers: a list of model initialization functions.
-        :param mapdicts: a list of explicit table column names if your excel data sheets do not have the exact column names
+        :param mapdicts: a list of explicit table column names
+                         if your excel data sheets do not have the exact column names
         :param keywords: additional keywords to :meth:`pyexcel.Book.save_to_database`
 
         """
         params = self.get_params(**keywords)
-        params['dest_session']=session
+        params['dest_session'] = session
         params['dest_tables'] = tables
-        params['dest_initializers']=initializers
+        params['dest_initializers'] = initializers
         params['dest_mapdicts'] = mapdicts
-        params['dest_auto_commit']=auto_commit
+        params['dest_auto_commit'] = auto_commit
         pe.save_book_as(**params)
 
 
@@ -218,7 +217,7 @@ def _make_response(io_stream, file_type,
     return ExcelResponse(io_stream.read(),
                          content_type=FILE_TYPE_MIME_TABLE[file_type],
                          status=status, file_name=file_name)
-    
+
 
 
 def make_response(pyexcel_instance, file_type,
@@ -242,50 +241,50 @@ def make_response(pyexcel_instance, file_type,
     :param status: unless a different status is to be returned.
     :returns: http response
     """
-    io = pyexcel_instance.save_to_memory(file_type, None, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pyexcel_instance.save_to_memory(file_type, None, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_array(array, file_type,
                              status=200, file_name=None, **keywords):
     """
     Make a http response from an array
-    
+
     :param array: a list of lists
     :param file_type: same as :meth:`~pyexcel_webio.make_response`
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    io = pe.save_as(array=array, dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_as(array=array, dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_dict(adict, file_type,
                             status=200, file_name=None, **keywords):
     """
     Make a http response from a dictionary of lists
-    
+
     :param dict: a dictinary of lists
     :param file_type: same as :meth:`~pyexcel_webio.make_response`
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    io = pe.save_as(adict=adict, dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_as(adict=adict, dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_records(records, file_type,
                                status=200, file_name=None, **keywords):
     """
     Make a http response from a list of dictionaries
-    
+
     :param records: a list of dictionaries
     :param file_type: same as :meth:`~pyexcel_webio.make_response`
     :param status: same as :meth:`~pyexcel_webio.make_response`
-    :returns: http response            
+    :returns: http response
     """
-    io = pe.save_as(records=records, dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_as(records=records, dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_book_dict(adict,
@@ -300,8 +299,8 @@ def make_response_from_book_dict(adict,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    io = pe.save_book_as(bookdict=adict, dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_book_as(bookdict=adict, dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_query_sets(query_sets, column_names,
@@ -318,9 +317,9 @@ def make_response_from_query_sets(query_sets, column_names,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    io = pe.save_as(query_sets=query_sets, column_names=column_names,
-                    dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_as(query_sets=query_sets, column_names=column_names,
+                             dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_a_table(session, table,
@@ -335,9 +334,9 @@ def make_response_from_a_table(session, table,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    io = pe.save_as(session=session, table=table,
-                    dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_as(session=session, table=table,
+                             dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
 
 
 def make_response_from_tables(session, tables,
@@ -345,12 +344,13 @@ def make_response_from_tables(session, tables,
                               **keywords):
     """
     Make a http response from sqlalchmy tables
-    
+
     :param session: SQLAlchemy session
     :param tables: SQLAlchemy tables
     :param file_type: same as :meth:`~pyexcel_webio.make_response`
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: a http response
     """
-    io = pe.save_book_as(session=session, tables=tables, dest_file_type=file_type, **keywords)
-    return _make_response(io, file_type, status, file_name)
+    file_stream = pe.save_book_as(session=session, tables=tables,
+                                  dest_file_type=file_type, **keywords)
+    return _make_response(file_stream, file_type, status, file_name)
