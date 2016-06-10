@@ -11,12 +11,15 @@ VERSION = '0.0.7'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
-DESCRIPTION = 'A generic request and response interface for pyexcel web extensions.'
+DESCRIPTION = (
+    'A generic request and response interface for pyexcel web extensions.' +
+    ''
+)
 KEYWORDS = [
-   'excel',
-   'python',
-   'pyexcel',
-        'http'
+    'excel',
+    'python',
+    'pyexcel',
+    'http'
 ]
 
 INSTALL_REQUIRES = [
@@ -33,18 +36,18 @@ CLASSIFIERS = [
     'Programming Language :: Python',
     'License :: OSI Approved :: BSD License',
     'Intended Audience :: Developers',
-        'Environment :: Web Environment',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'Development Status :: 3 - Alpha',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: Implementation :: PyPy'
+    'Environment :: Web Environment',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Development Status :: 3 - Alpha',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: Implementation :: PyPy'
 ]
 
 

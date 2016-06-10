@@ -9,6 +9,9 @@
 """
 import pyexcel as pe
 
+_XLSX_MIME = (
+    "application/" +
+    "vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 FILE_TYPE_MIME_TABLE = {
     "csv": "text/csv",
@@ -17,7 +20,7 @@ FILE_TYPE_MIME_TABLE = {
     "tsvz": "application/zip",
     "ods": "application/vnd.oasis.opendocument.spreadsheet",
     "xls": "application/vnd.ms-excel",
-    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "xlsx": _XLSX_MIME,
     "xlsm": "application/vnd.ms-excel.sheet.macroenabled.12",
     "json": "application/json",
     "plain": "text/plain",
@@ -116,10 +119,12 @@ class ExcelInput(object):
 
         :param session: a SQLAlchemy session
         :param table: a database table
-        :param initializer: a custom table initialization function if you have one
-        :param mapdict: the explicit table column names if your excel data do not
-                        have the exact column names
-        :param keywords: additional keywords to :meth:`pyexcel.Sheet.save_to_database`
+        :param initializer: a custom table initialization function if
+                            you have one
+        :param mapdict: the explicit table column names if your excel
+                        data do not have the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Sheet.save_to_database`
         """
         params = self.get_params(**keywords)
         if 'name_columns_by_row' not in params:
@@ -159,10 +164,13 @@ class ExcelInput(object):
 
         :param session: a SQLAlchemy session
         :param tables: a list of database tables
-        :param initializers: a list of model initialization functions.
+        :param initializers: a list of model
+                             initialization functions.
         :param mapdicts: a list of explicit table column names
-                         if your excel data sheets do not have the exact column names
-        :param keywords: additional keywords to :meth:`pyexcel.Book.save_to_database`
+                         if your excel data sheets do not have
+                         the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Book.save_to_database`
 
         """
         params = self.get_params(**keywords)
@@ -175,7 +183,9 @@ class ExcelInput(object):
 
 
 class ExcelInputInMultiDict(ExcelInput):
-    """ A generic interface for an upload excel file appearing in a dictionary
+    """
+    A generic interface for an upload excel file
+    appearing in a dictionary
     """
     def get_file_tuple(self, field_name):
         """
@@ -217,7 +227,6 @@ def _make_response(io_stream, file_type,
     return ExcelResponse(io_stream.read(),
                          content_type=FILE_TYPE_MIME_TABLE[file_type],
                          status=status, file_name=file_name)
-
 
 
 def make_response(pyexcel_instance, file_type,
@@ -283,7 +292,8 @@ def make_response_from_records(records, file_type,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    file_stream = pe.save_as(records=records, dest_file_type=file_type, **keywords)
+    file_stream = pe.save_as(records=records,
+                             dest_file_type=file_type, **keywords)
     return _make_response(file_stream, file_type, status, file_name)
 
 
@@ -299,7 +309,8 @@ def make_response_from_book_dict(adict,
     :param status: same as :meth:`~pyexcel_webio.make_response`
     :returns: http response
     """
-    file_stream = pe.save_book_as(bookdict=adict, dest_file_type=file_type, **keywords)
+    file_stream = pe.save_book_as(bookdict=adict,
+                                  dest_file_type=file_type, **keywords)
     return _make_response(file_stream, file_type, status, file_name)
 
 

@@ -1,5 +1,6 @@
 nose
 codecov
 coverage
+flake8
 SQLAlchemy
 pyexcel-xls>=0.1.0

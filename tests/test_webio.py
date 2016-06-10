@@ -4,15 +4,15 @@ from unittest import TestCase
 import pyexcel as pe
 import pyexcel_webio as webio
 from db import Session, Base, Signature, Signature2, engine
+from nose.tools import raises
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
-from nose.tools import raises
-    
+
 FILE_NAME = "response_test"
 OUTPUT = "%s.xls" % FILE_NAME
-    
+
 
 class TestInput(webio.ExcelInput):
     """This is sample implementation that read excel source from file"""
@@ -40,17 +40,17 @@ class TestExceptions:
     @raises(NotImplementedError)
     def test_load_single_sheet(self):
         testinput = webio.ExcelInput()
-        testinput.get_sheet(file_name="test") # booom
+        testinput.get_sheet(file_name="test")  # booom
 
     @raises(NotImplementedError)
     def test_load_book(self):
         testinput = webio.ExcelInput()
-        testinput.get_book(file_name="test") # booom
+        testinput.get_book(file_name="test")  # booom
 
     @raises(NotImplementedError)
     def test_excel_input_get_file_tuple(self):
         testinput = webio.ExcelInputInMultiDict()
-        testinput.get_file_tuple(field_name="test") # booom
+        testinput.get_file_tuple(field_name="test")  # booom
 
     @raises(NotImplementedError)
     def test_get_sheet(self):
@@ -84,7 +84,7 @@ class TestExceptions:
 
     def test_dummy_function(self):
         result = webio.dummy_func(None, None)
-        assert result == None
+        assert result is None
 
 
 # excel inputs
@@ -131,13 +131,16 @@ class TestExcelInput:
         Base.metadata.create_all(engine)
         self.session = Session()
         myinput = TestInput()
-        myinput.save_to_database(file_name=self.testfile, session=self.session, table=Signature)
+        myinput.save_to_database(file_name=self.testfile,
+                                 session=self.session,
+                                 table=Signature)
         array = pe.get_array(session=self.session, table=Signature)
         assert array == self.data
         self.session.close()
 
     def tearDown(self):
         os.unlink(self.testfile)
+
 
 class TestExcelInput2:
     def setUp(self):
@@ -194,7 +197,9 @@ class TestExcelInputOnBook(TestCase):
         Base.metadata.create_all(engine)
         self.session = Session()
         myinput = TestInput()
-        myinput.save_book_to_database(file_name=self.testfile, session=self.session, tables=[Signature, Signature2])
+        myinput.save_book_to_database(file_name=self.testfile,
+                                      session=self.session,
+                                      tables=[Signature, Signature2])
         array = pe.get_array(session=self.session, table=Signature)
         self.assertEqual(array, self.data)
         array = pe.get_array(session=self.session, table=Signature2)
@@ -218,14 +223,14 @@ class TestExcelInput2OnBook:
 
     def test_get_book(self):
         myinput = TestExtendedInput()
-        f = open(self.testfile,'rb')
+        f = open(self.testfile, 'rb')
         result = myinput.get_book(field_name=('xls', f))
         assert result["sheet1"].to_array() == self.data
         assert result["sheet2"].to_array() == self.data1
         f.close()
 
 
-## responses
+# responses
 class TestResponse:
     def setUp(self):
         self.data = [
@@ -263,29 +268,31 @@ class TestResponse:
     def test_make_response_from_table(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
-        row1 = Signature(X=1,Y=2, Z=3)
+        row1 = Signature(X=1, Y=2, Z=3)
         row2 = Signature(X=4, Y=5, Z=6)
         session = Session()
         session.add(row1)
         session.add(row2)
         session.commit()
-        webio.make_response_from_a_table(session, Signature, "xls", file_name=FILE_NAME)
+        webio.make_response_from_a_table(session, Signature, "xls",
+                                         file_name=FILE_NAME)
         self.verify()
         session.close()
 
     def test_make_response_from_query_sets(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
-        row1 = Signature(X=1,Y=2, Z=3)
+        row1 = Signature(X=1, Y=2, Z=3)
         row2 = Signature(X=4, Y=5, Z=6)
         session = Session()
         session.add(row1)
         session.add(row2)
         session.commit()
-        query_sets=session.query(Signature).filter_by(X=1).all()
-        column_names= ["X", "Y", "Z"]
-        webio.make_response_from_query_sets(query_sets, column_names, "xls", file_name=FILE_NAME)
-        sheet2=pe.get_sheet(file_name=OUTPUT)
+        query_sets = session.query(Signature).filter_by(X=1).all()
+        column_names = ["X", "Y", "Z"]
+        webio.make_response_from_query_sets(query_sets, column_names, "xls",
+                                            file_name=FILE_NAME)
+        sheet2 = pe.get_sheet(file_name=OUTPUT)
         assert sheet2.to_array() == [
             ["X", "Y", "Z"],
             [1, 2, 3]
@@ -304,9 +311,12 @@ class TestResponse:
 class TestBookResponse:
     def setUp(self):
         self.content = OrderedDict()
-        self.content.update({"Sheet1": [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3]]})
-        self.content.update({"Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]]})
-        self.content.update({"Sheet3": [[u'X', u'Y', u'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]})
+        self.content.update({
+            "Sheet1": [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3]]})
+        self.content.update({
+            "Sheet2": [[4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6]]})
+        self.content.update({
+            "Sheet3": [[u'X', u'Y', u'Z'], [1, 4, 7], [2, 5, 8], [3, 6, 9]]})
 
     def test_make_response_from_book(self):
         book = pe.get_book(bookdict=self.content)
@@ -314,7 +324,8 @@ class TestBookResponse:
         self.verify()
 
     def test_make_response_from_book_dict(self):
-        webio.make_response_from_book_dict(self.content, "xls", file_name=FILE_NAME)
+        webio.make_response_from_book_dict(self.content, "xls",
+                                           file_name=FILE_NAME)
         self.verify()
 
     def verify(self):
@@ -330,19 +341,23 @@ class TestBookResponseFromDataBase:
     def test_make_response_from_tables(self):
         Base.metadata.drop_all(engine)
         Base.metadata.create_all(engine)
-        row1 = Signature(X=1,Y=2, Z=3)
+        row1 = Signature(X=1, Y=2, Z=3)
         row2 = Signature(X=4, Y=5, Z=6)
         row3 = Signature2(A=1, B=2, C=3)
         row4 = Signature2(A=4, B=5, C=6)
-        session =Session()
+        session = Session()
         session.add(row1)
         session.add(row2)
         session.add(row3)
         session.add(row4)
         session.commit()
-        webio.make_response_from_tables(session, [Signature, Signature2], "xls", file_name=FILE_NAME)
+        webio.make_response_from_tables(
+            session, [Signature, Signature2],
+            "xls", file_name=FILE_NAME)
         book = pe.get_book(file_name=OUTPUT)
         expected = OrderedDict()
-        expected.update({'signature': [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]})
-        expected.update({'signature2': [['A', 'B', 'C'], [1, 2, 3], [4, 5, 6]]})
+        expected.update({
+            'signature': [['X', 'Y', 'Z'], [1, 2, 3], [4, 5, 6]]})
+        expected.update({
+            'signature2': [['A', 'B', 'C'], [1, 2, 3], [4, 5, 6]]})
         assert book.to_dict() == expected
