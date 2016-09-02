@@ -220,7 +220,6 @@ ExcelResponse = dummy_func
 
 def _make_response(io_stream, file_type,
                    status=200, file_name=None):
-    io_stream.seek(0)
     if file_name:
         if not file_name.endswith(file_type):
             file_name = "%s.%s" % (file_name, file_type)
