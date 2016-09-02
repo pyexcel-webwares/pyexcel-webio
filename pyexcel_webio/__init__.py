@@ -218,12 +218,14 @@ def dummy_func(content, content_type=None, status=200, file_name=None):
 ExcelResponse = dummy_func
 
 
-def _make_response(io_stream, file_type,
+def _make_response(content, file_type,
                    status=200, file_name=None):
+    if hasattr(content, "read"):
+        content = content.read()
     if file_name:
         if not file_name.endswith(file_type):
             file_name = "%s.%s" % (file_name, file_type)
-    return ExcelResponse(io_stream.read(),
+    return ExcelResponse(content,
                          content_type=FILE_TYPE_MIME_TABLE[file_type],
                          status=status, file_name=file_name)
 
@@ -249,8 +251,8 @@ def make_response(pyexcel_instance, file_type,
     :param status: unless a different status is to be returned.
     :returns: http response
     """
-    file_stream = pyexcel_instance.save_to_memory(file_type, None, **keywords)
-    return _make_response(file_stream, file_type, status, file_name)
+    file_content = pyexcel_instance.save_to_memory(file_type, None, **keywords)
+    return _make_response(file_content, file_type, status, file_name)
 
 
 def make_response_from_array(array, file_type,
