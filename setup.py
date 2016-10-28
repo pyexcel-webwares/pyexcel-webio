@@ -10,7 +10,6 @@ AUTHOR = 'C.W.'
 VERSION = '0.0.8'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
-PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
 DESCRIPTION = (
     'A generic request and response interface for pyexcel web extensions.' +
     ''
@@ -21,14 +20,6 @@ KEYWORDS = [
     'pyexcel',
     'http'
 ]
-
-INSTALL_REQUIRES = [
-    'pyexcel>=0.3.0',
-]
-
-
-EXTRAS_REQUIRE = {
-}
 
 CLASSIFIERS = [
     'Topic :: Office/Business',
@@ -50,6 +41,15 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: Implementation :: PyPy'
 ]
+
+INSTALL_REQUIRES = [
+    'pyexcel>=0.3.0',
+]
+
+
+PACKAGES = find_packages(exclude=['ez_setup', 'examples', 'tests'])
+EXTRAS_REQUIRE = {
+}
 
 
 def read_files(*files):
@@ -96,14 +96,14 @@ if __name__ == '__main__':
         version=VERSION,
         author_email=EMAIL,
         description=DESCRIPTION,
-        install_requires=INSTALL_REQUIRES,
+        long_description=read_files('README.rst', 'CHANGELOG.rst'),
+        license=LICENSE,
         keywords=KEYWORDS,
         extras_require=EXTRAS_REQUIRE,
+        tests_require=['nose'],
+        install_requires=INSTALL_REQUIRES,
         packages=PACKAGES,
         include_package_data=True,
-        long_description=read_files('README.rst', 'CHANGELOG.rst'),
         zip_safe=False,
-        tests_require=['nose'],
-        license=LICENSE,
         classifiers=CLASSIFIERS
     )
