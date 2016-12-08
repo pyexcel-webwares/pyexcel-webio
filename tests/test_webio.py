@@ -4,7 +4,7 @@ from unittest import TestCase
 import pyexcel as pe
 import pyexcel_webio as webio
 from db import Session, Base, Signature, Signature2, engine
-from nose.tools import raises
+from nose.tools import raises, eq_
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     from ordereddict import OrderedDict
 else:
@@ -238,14 +238,18 @@ class TestResponse:
             [1, 2, 3],
             [4, 5, 6]
         ]
+        self.test_sheet_name = 'custom sheet name'
 
     def test_make_response_from_sheet(self):
         sheet = pe.Sheet(self.data)
-        webio.make_response(sheet, "xls", file_name=FILE_NAME)
+        webio.make_response(sheet, "xls", file_name=FILE_NAME,
+                            sheet_name=self.test_sheet_name)
         self.verify()
 
     def test_make_response_from_array(self):
-        webio.make_response_from_array(self.data, "xls", file_name=FILE_NAME)
+        webio.make_response_from_array(
+            self.data, "xls",
+            file_name=FILE_NAME, sheet_name=self.test_sheet_name)
         self.verify()
 
     def test_make_response_from_records(self):
@@ -253,7 +257,9 @@ class TestResponse:
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
         ]
-        webio.make_response_from_records(records, "xls", file_name=FILE_NAME)
+        webio.make_response_from_records(
+            records, "xls",
+            file_name=FILE_NAME, sheet_name=self.test_sheet_name)
         self.verify()
 
     def test_make_response_from_dict(self):
@@ -262,7 +268,8 @@ class TestResponse:
             "Y": [2, 5],
             "Z": [3, 6]
         }
-        webio.make_response_from_dict(adict, "xls", file_name=FILE_NAME)
+        webio.make_response_from_dict(
+            adict, "xls", file_name=FILE_NAME, sheet_name=self.test_sheet_name)
         self.verify()
 
     def test_make_response_from_table(self):
@@ -274,8 +281,9 @@ class TestResponse:
         session.add(row1)
         session.add(row2)
         session.commit()
-        webio.make_response_from_a_table(session, Signature, "xls",
-                                         file_name=FILE_NAME)
+        webio.make_response_from_a_table(
+            session, Signature, "xls",
+            file_name=FILE_NAME, sheet_name=self.test_sheet_name)
         self.verify()
         session.close()
 
@@ -290,8 +298,9 @@ class TestResponse:
         session.commit()
         query_sets = session.query(Signature).filter_by(X=1).all()
         column_names = ["X", "Y", "Z"]
-        webio.make_response_from_query_sets(query_sets, column_names, "xls",
-                                            file_name=FILE_NAME)
+        webio.make_response_from_query_sets(
+            query_sets, column_names, "xls",
+            file_name=FILE_NAME, sheet_name=self.test_sheet_name)
         sheet2 = pe.get_sheet(file_name=OUTPUT)
         assert sheet2.to_array() == [
             ["X", "Y", "Z"],
@@ -302,6 +311,7 @@ class TestResponse:
     def verify(self):
         sheet2 = pe.get_sheet(file_name=OUTPUT)
         assert sheet2.to_array() == self.data
+        eq_(sheet2.name, self.test_sheet_name)
 
     def tearDown(self):
         if os.path.exists(OUTPUT):
