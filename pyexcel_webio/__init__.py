@@ -231,7 +231,8 @@ def _make_response(content, file_type,
 
 
 def make_response(pyexcel_instance, file_type,
-                  status=200, file_name=None, **keywords):
+                  status=200, file_name=None,
+                  sheet_name=None, **keywords):
     """
     Make a http response from a pyexcel instance of
     :class:`~pyexcel.Sheet` or :class:`~pyexcel.Book`
@@ -251,6 +252,8 @@ def make_response(pyexcel_instance, file_type,
     :param status: unless a different status is to be returned.
     :returns: http response
     """
+    if hasattr(pyexcel_instance, 'name') and sheet_name is not None:
+        pyexcel_instance.name = sheet_name
     file_content = pyexcel_instance.save_to_memory(file_type, None, **keywords)
     return _make_response(file_content, file_type, status, file_name)
 
