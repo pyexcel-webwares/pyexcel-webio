@@ -4,6 +4,6 @@ nick_name: webio
 version: 0.0.9
 release: 0.0.8
 dependencies:
-  - pyexcel>=0.3.0
+  - pyexcel>=0.3.4
 description: |
   A generic request and response interface for pyexcel web extensions.
