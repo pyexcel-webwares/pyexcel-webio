@@ -1,8 +1,8 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-webio"
 nick_name: webio
-version: 0.0.8
-release: 0.0.7
+version: 0.0.9
+release: 0.0.8
 dependencies:
   - pyexcel>=0.3.0
 description: |

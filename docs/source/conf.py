@@ -16,8 +16,8 @@ master_doc = 'index'
 
 project = u'pyexcel-webio'
 copyright = u'2015-2016 Onni Software Ltd.'
-version = '0.0.7'
-release = '0.0.8'
+version = '0.0.8'
+release = '0.0.9'
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'default'
