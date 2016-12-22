@@ -163,6 +163,13 @@ class TestExcelInput2:
         assert sheet.to_array() == self.data
         f.close()
 
+    @raises(IOError)
+    def test_get_sheet_in_exception(self):
+        myinput = TestExtendedInput()
+        f = open(self.testfile, 'rb')
+        f.read()
+        myinput.get_sheet(field_name=('xls', f))
+
     @raises(Exception)
     def test_wrong_file_tuple_returned(self):
         myinput = TestExtendedInput()
