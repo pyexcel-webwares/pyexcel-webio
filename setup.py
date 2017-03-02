@@ -7,7 +7,7 @@ except ImportError:
 
 NAME = 'pyexcel-webio'
 AUTHOR = 'C.W.'
-VERSION = '0.0.10'
+VERSION = '0.0.11'
 EMAIL = 'wangc_2011 (at) hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
@@ -28,6 +28,12 @@ CLASSIFIERS = [
     'Programming Language :: Python',
     'License :: OSI Approved :: BSD License',
     'Intended Audience :: Developers',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
     'Environment :: Web Environment',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Software Development :: Libraries :: Python Modules',
