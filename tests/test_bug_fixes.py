@@ -27,3 +27,13 @@ def test_issue_4():
             array = myinput.get_array(field_name=('csv', f))
             eq_(array, expected)
 
+
+def test_issue_4_passing_delimiter():
+    myinput = TestExtendedInput()
+    fixture = os.path.join("tests", "fixtures", "issue4-test.csv")
+
+    expected = [[1, 2, 3], [4, 5, 6]]
+    with open(fixture, "rb") as f:
+        array = myinput.get_array(field_name=('csv', f),
+                                  delimiter='\t')
+        eq_(array, expected)
