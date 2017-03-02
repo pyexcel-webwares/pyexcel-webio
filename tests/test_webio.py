@@ -3,6 +3,7 @@ import sys
 from unittest import TestCase
 import pyexcel as pe
 import pyexcel_webio as webio
+from common import TestInput, TestExtendedInput
 from db import Session, Base, Signature, Signature2, engine
 from nose.tools import raises, eq_
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
@@ -12,19 +13,6 @@ else:
 
 FILE_NAME = "response_test"
 OUTPUT = "%s.xls" % FILE_NAME
-
-
-class TestInput(webio.ExcelInput):
-    """This is sample implementation that read excel source from file"""
-    def get_params(self, **keywords):
-        """Load a single sheet"""
-        return keywords
-
-
-class TestExtendedInput(webio.ExcelInputInMultiDict):
-    """This is sample implementation that read excel source from file"""
-    def get_file_tuple(self, field_name):
-        return field_name
 
 
 def dumpy_response(content, content_type=None, status=200, file_name=None):
@@ -52,32 +40,32 @@ class TestExceptions:
         testinput = webio.ExcelInputInMultiDict()
         testinput.get_file_tuple(field_name="test")  # booom
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_sheet(self):
         myinput = TestInput()
         myinput.get_sheet(unrelated="foo bar")
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_array(self):
         myinput = TestInput()
         myinput.get_array(unrelated="foo bar")
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_dict(self):
         myinput = TestInput()
         myinput.get_dict(unrelated="foo bar")
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_records(self):
         myinput = TestInput()
         myinput.get_records(unrelated="foo bar")
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_book(self):
         myinput = TestInput()
         myinput.get_book(unrelated="foo bar")
 
-    @raises(NotImplementedError)
+    @raises(pe.sources.factory.UnknownParameters)
     def test_get_book_dict(self):
         myinput = TestInput()
         myinput.get_book_dict(unrelated="foo bar")

@@ -204,10 +204,11 @@ class ExcelInputInMultiDict(ExcelInput):
         if file_type is not None and file_handle is not None:
             content = file_handle.read()
             if content:
-                keywords = {
+                params = {
                     'file_type': file_type,
                     'file_content': content
                 }
+                keywords.update(params)
                 return keywords
             else:
                 raise IOError("No content was uploaded")
