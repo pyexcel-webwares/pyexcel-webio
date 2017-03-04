@@ -1,26 +1,35 @@
-==============
-pyexcel-webio
-==============
+================================================================================
+pyexcel-webio - Let you focus on data, instead of file formats
+================================================================================
 
-.. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.png
-    :target: http://travis-ci.org/pyexcel/pyexcel-webio
+.. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.svg?branch=master
+   :target: http://travis-ci.org/pyexcel/pyexcel-webio
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-webio/coverage.png
     :target: https://codecov.io/github/pyexcel/pyexcel-webio
 
 
+Known constraints
+==================
+
+Fonts, colors and charts are not supported.
+
 **pyexcel-webio** is a tiny interface library to unify the web extensions that uses `pyexcel <https://github.com/pyexcel/pyexcel>`__ . You may use it to write a web extension for your faviourite Python web framework.
 
 
-Installation
-============
 
-You can install it via pip::
+Installation
+================================================================================
+You can install it via pip:
+
+.. code-block:: bash
 
     $ pip install pyexcel-webio
 
 
-or clone it and install it::
+or clone it and install it:
+
+.. code-block:: bash
 
     $ git clone http://github.com/pyexcel/pyexcel-webio.git
     $ cd pyexcel-webio
@@ -42,6 +51,7 @@ Pyramid        `pyramid-excel`_
 .. _django-excel: https://github.com/pyexcel/django-excel
 .. _pyramid-excel: https://github.com/pyexcel/pyramid-excel
 
+
 Usage
 =========
 
@@ -59,7 +69,7 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
             filename = filehandle.filename
             extension = filename.split(".")[1]
             return extension, filehandle
-    
+
         def load_single_sheet(self, field_name=None, sheet_name=None,
                               **keywords):
             file_type, file_handle = self._get_file_tuple(field_name)
@@ -67,7 +77,7 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
                                 content=file_handle.read(),
                                 sheet_name=sheet_name,
                                 **keywords)
-    
+
         def load_book(self, field_name=None, **keywords):
             file_type, file_handle = self._get_file_tuple(field_name)
             return pe.get_book(file_type=file_type,
@@ -103,12 +113,62 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
         make_response_from_book_dict
     )
 
+Development guide
+================================================================================
+
+Development steps for code changes
+
+#. git clone https://github.com/pyexcel/pyexcel-webio.git
+#. cd pyexcel-webio
+
+Upgrade your setup tools and pip. They are needed for development and testing only:
+
+#. pip install --upgrade setuptools "pip==7.1"
+
+Then install relevant development requirements:
+
+#. pip install -r rnd_requirements.txt # if such a file exists
+#. pip install -r requirements.txt
+#. pip install -r tests/requirements.txt
+
+
+In order to update test environment, and documentation, additional steps are
+required:
+
+#. pip install moban
+#. git clone https://github.com/pyexcel/pyexcel-commons.git commons
+#. make your changes in `.moban.d` directory, then issue command `moban`
+
+What is rnd_requirements.txt
+-------------------------------
+
+Usually, it is created when a dependent library is not released. Once the dependecy is installed(will be released), the future version of the dependency in the requirements.txt will be valid.
+
+What is pyexcel-commons
+---------------------------------
+
+Many information that are shared across pyexcel projects, such as: this developer guide, license info, etc. are stored in `pyexcel-commons` project.
+
+What is .moban.d
+---------------------------------
+
+`.moban.d` stores the specific meta data for the library.
+
+How to test your contribution
+------------------------------
+
+Although `nose` and `doctest` are both used in code testing, it is adviable that unit tests are put in tests. `doctest` is incorporated only to make sure the code examples in documentation remain valid across different development releases.
+
+On Linux/Unix systems, please launch your tests like this::
+
+    $ make
+
+On Windows systems, please issue this command::
+
+    > test.bat
+
+
 License
-==========
+================================================================================
 
 New BSD License
-
-Dependencies
-============
-
-* pyexcel >= 0.1.7
