@@ -40,32 +40,32 @@ class TestExceptions:
         testinput = webio.ExcelInputInMultiDict()
         testinput.get_file_tuple(field_name="test")  # booom
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_sheet(self):
         myinput = TestInput()
         myinput.get_sheet(unrelated="foo bar")
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_array(self):
         myinput = TestInput()
         myinput.get_array(unrelated="foo bar")
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_dict(self):
         myinput = TestInput()
         myinput.get_dict(unrelated="foo bar")
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_records(self):
         myinput = TestInput()
         myinput.get_records(unrelated="foo bar")
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_book(self):
         myinput = TestInput()
         myinput.get_book(unrelated="foo bar")
 
-    @raises(pe.sources.factory.UnknownParameters)
+    @raises(pe.exceptions.UnknownParameters)
     def test_get_book_dict(self):
         myinput = TestInput()
         myinput.get_book_dict(unrelated="foo bar")
