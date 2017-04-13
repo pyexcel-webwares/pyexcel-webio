@@ -2,12 +2,17 @@
 pyexcel-webio - Let you focus on data, instead of file formats
 ================================================================================
 
+.. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
+   :target: https://www.patreon.com/pyexcel
+
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-webio
 
 .. image:: https://codecov.io/github/pyexcel/pyexcel-webio/coverage.png
-    :target: https://codecov.io/github/pyexcel/pyexcel-webio
+   :target: https://codecov.io/github/pyexcel/pyexcel-webio
 
+.. image:: https://readthedocs.org/projects/pyexcel-webio/badge/?version=latest
+   :target: http://pyexcel-webio.readthedocs.org/en/latest/
 
 Known constraints
 ==================
@@ -172,3 +177,9 @@ License
 ================================================================================
 
 New BSD License
+
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please `support me on patreon <https://www.patreon.com/pyexcel>`_.
