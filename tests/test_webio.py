@@ -97,6 +97,11 @@ class TestExcelInput:
         array = myinput.get_array(file_name=self.testfile)
         assert array == self.data
 
+    def test_iget_array(self):
+        myinput = TestInput()
+        array = myinput.iget_array(file_name=self.testfile)
+        assert list(array) == self.data
+
     def test_get_dict(self):
         myinput = TestInput()
         result = myinput.get_dict(file_name=self.testfile)
@@ -110,6 +115,14 @@ class TestExcelInput:
         myinput = TestInput()
         result = myinput.get_records(file_name=self.testfile)
         assert result == [
+            {"X": 1, "Y": 2, "Z": 3},
+            {"X": 4, "Y": 5, "Z": 6}
+        ]
+
+    def test_iget_records(self):
+        myinput = TestInput()
+        result = myinput.get_records(file_name=self.testfile)
+        assert list(result) == [
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
         ]

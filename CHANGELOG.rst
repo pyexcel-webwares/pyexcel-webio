@@ -1,13 +1,21 @@
 Change log
 ================================================================================
 
+0.1.1 - deferred
+--------------------------------------------------------------------------------
+
+Added
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. To bring isave_as and isave_book_as to web clients
+
 0.1.0 - unreleased
 --------------------------------------------------------------------------------
 
 Added
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#. To bring iget_array, iget_records, isave_as and isave_book_as to web clients
+#. To bring iget_array, iget_records to web clients
 #. To facilitate the use of pyexcel-handsontable, pyexcel-pygal
 
 0.0.11 - 04.03.2017
