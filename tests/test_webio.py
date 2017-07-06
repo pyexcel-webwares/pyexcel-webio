@@ -122,7 +122,7 @@ class TestExcelInput:
 
     def test_iget_records(self):
         myinput = TestInput()
-        result = myinput.get_records(file_name=self.testfile)
+        result = myinput.iget_records(file_name=self.testfile)
         assert list(result) == [
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
