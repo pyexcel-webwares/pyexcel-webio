@@ -1,10 +1,10 @@
 """
-    pyexcel.ext.webio
+    pyexcel_webio
     ~~~~~~~~~~~~~~~~~~~
 
     A generic request and response interface for pyexcel web extensions
 
-    :copyright: (c) 2015 by Onni Software Ltd.
+    :copyright: (c) 2015-2017 by Onni Software Ltd.
     :license: New BSD License
 """
 import pyexcel as pe
@@ -31,7 +31,11 @@ FILE_TYPE_MIME_TABLE = {
     "rst": "text/plain",
     "mediawiki": "text/plain",
     "latex": "application/x-latex",
-    "latex_booktabs": "application/x-latex"
+    "latex_booktabs": "application/x-latex",
+    "svg": "application/svg+xml",
+    "html": "text/html; charset=UTF-8",
+    "handsontable.html": "text/html; charset=UTF-8",
+    "png": "image/png"
 }
 
 
