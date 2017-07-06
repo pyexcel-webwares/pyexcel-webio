@@ -80,6 +80,20 @@ class ExcelInput(object):
         params = self.get_params(**keywords)
         return pe.get_array(**params)
 
+    def iget_array(self, **keywords):
+        """
+        Get a generator for a list of lists from the file
+
+        :param sheet_name: For an excel book, there could be multiple
+                           sheets. If it is left unspecified, the
+                           sheet at index 0 is loaded. For 'csv',
+                           'tsv' file, *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A generator for a list of lists
+        """
+        params = self.get_params(**keywords)
+        return pe.iget_array(**params)
+
     def get_dict(self, **keywords):
         """Get a dictionary from the file
 
@@ -110,6 +124,19 @@ class ExcelInput(object):
             params['name_columns_by_row'] = 0
         return pe.get_records(**params)
 
+    def iget_records(self, **keywords):
+        """Get a generator of a list of records from the file
+
+        :param sheet_name: For an excel book, there could be multiple
+                           sheets. If it is left unspecified, the
+                           sheet at index 0 is loaded. For 'csv',
+                           'tsv' file, *sheet_name* should be None anyway.
+        :param keywords: additional key words
+        :returns: A generator of alist of records
+        """
+        params = self.get_params(**keywords)
+        return pe.iget_records(**params)
+
     def save_to_database(self, session=None, table=None,
                          initializer=None, mapdict=None,
                          auto_commit=True,
@@ -137,6 +164,34 @@ class ExcelInput(object):
         params['dest_mapdict'] = mapdict
         params['dest_auto_commit'] = auto_commit
         pe.save_as(**params)
+
+    def isave_to_database(self, session=None, table=None,
+                          initializer=None, mapdict=None,
+                          auto_commit=True,
+                          **keywords):
+        """
+        Save data from a sheet to database
+
+        :param session: a SQLAlchemy session
+        :param table: a database table
+        :param initializer: a custom table initialization function if
+                            you have one
+        :param mapdict: the explicit table column names if your excel
+                        data do not have the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Sheet.save_to_database`
+        """
+        params = self.get_params(**keywords)
+        if 'name_columns_by_row' not in params:
+            params['name_columns_by_row'] = 0
+        if 'name_rows_by_column' not in params:
+            params['name_rows_by_column'] = -1
+        params['dest_session'] = session
+        params['dest_table'] = table
+        params['dest_initializer'] = initializer
+        params['dest_mapdict'] = mapdict
+        params['dest_auto_commit'] = auto_commit
+        pe.isave_as(**params)
 
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
@@ -180,6 +235,31 @@ class ExcelInput(object):
         params['dest_mapdicts'] = mapdicts
         params['dest_auto_commit'] = auto_commit
         pe.save_book_as(**params)
+
+    def isave_book_to_database(self, session=None, tables=None,
+                               initializers=None, mapdicts=None,
+                               auto_commit=True, **keywords):
+        """
+        Save a big book into database
+
+        :param session: a SQLAlchemy session
+        :param tables: a list of database tables
+        :param initializers: a list of model
+                             initialization functions.
+        :param mapdicts: a list of explicit table column names
+                         if your excel data sheets do not have
+                         the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Book.save_to_database`
+
+        """
+        params = self.get_params(**keywords)
+        params['dest_session'] = session
+        params['dest_tables'] = tables
+        params['dest_initializers'] = initializers
+        params['dest_mapdicts'] = mapdicts
+        params['dest_auto_commit'] = auto_commit
+        pe.isave_book_as(**params)
 
 
 class ExcelInputInMultiDict(ExcelInput):
