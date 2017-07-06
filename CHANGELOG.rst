@@ -9,14 +9,15 @@ Added
 
 #. To bring isave_as and isave_book_as to web clients
 
-0.1.0 - unreleased
+0.1.0 - 06.07.2017
 --------------------------------------------------------------------------------
 
 Added
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #. To bring iget_array, iget_records to web clients
-#. To facilitate the use of pyexcel-handsontable, pyexcel-pygal
+#. To facilitate the use of pyexcel-handsontable, pyexcel-pygal,
+   pyexcel-matplotlib
 
 0.0.11 - 04.03.2017
 --------------------------------------------------------------------------------
