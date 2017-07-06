@@ -7,8 +7,8 @@ except ImportError:
 
 NAME = 'pyexcel-webio'
 AUTHOR = 'C.W.'
-VERSION = '0.0.11'
-EMAIL = 'wangc_2011 (at) hotmail.com'
+VERSION = '0.1.0'
+EMAIL = 'wangc_2011@hotmail.com'
 LICENSE = 'New BSD'
 DESCRIPTION = (
     'A generic request and response interface for pyexcel web extensions.' +
