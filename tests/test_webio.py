@@ -101,6 +101,7 @@ class TestExcelInput:
         myinput = TestInput()
         array = myinput.iget_array(file_name=self.testfile)
         assert list(array) == self.data
+        myinput.free_resources()
 
     def test_get_dict(self):
         myinput = TestInput()
@@ -126,6 +127,7 @@ class TestExcelInput:
             {"X": 1, "Y": 2, "Z": 3},
             {"X": 4, "Y": 5, "Z": 6}
         ]
+        myinput.free_resources()
 
     def test_save_to_database(self):
         Base.metadata.drop_all(engine)

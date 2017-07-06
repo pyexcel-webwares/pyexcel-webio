@@ -212,6 +212,13 @@ class ExcelInput(object):
         params['dest_auto_commit'] = auto_commit
         pe.save_book_as(**params)
 
+    def free_resources(self):
+        """
+        After you have used iget_array and iget_records, it's
+        recommended to call this function
+        """
+        pe.free_resources()
+
 
 class ExcelInputInMultiDict(ExcelInput):
     """
