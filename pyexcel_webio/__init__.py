@@ -233,6 +233,7 @@ class ExcelInputInMultiDict(ExcelInput):
         """
         file_type, file_handle = self.get_file_tuple(field_name)
         if file_type is not None and file_handle is not None:
+            file_handle.seek(0)
             content = file_handle.read()
             if content:
                 params = {

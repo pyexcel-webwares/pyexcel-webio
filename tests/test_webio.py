@@ -143,7 +143,7 @@ class TestExcelInput:
         os.unlink(self.testfile)
 
 
-class TestExcelInput2:
+class TestExcelInputInMultiDict:
     def setUp(self):
         self.data = [
             ["X", "Y", "Z"],
@@ -164,12 +164,23 @@ class TestExcelInput2:
         assert sheet.to_array() == self.data
         f.close()
 
-    @raises(IOError)
-    def test_get_sheet_in_exception(self):
+    def test_a_consumed_file_handle(self):
         myinput = TestExtendedInput()
         f = open(self.testfile, 'rb')
         f.read()
+        sheet = myinput.get_sheet(field_name=('xls', f))
+        assert sheet.to_array() == self.data
+        f.close()
+
+    @raises(IOError)
+    def test_get_sheet_in_exception(self):
+        myinput = TestExtendedInput()
+        empty_file = 'empty_file'
+        with open(empty_file, 'w') as f:
+            f.write('')
+        f = open(empty_file, 'rb')
         myinput.get_sheet(field_name=('xls', f))
+        os.unlink(empty_file)
 
     @raises(Exception)
     def test_wrong_file_tuple_returned(self):
