@@ -169,6 +169,30 @@ class ExcelInput(object):
         params['dest_auto_commit'] = auto_commit
         pe.save_as(**params)
 
+    def isave_to_database(self, session=None, table=None,
+                          initializer=None, mapdict=None,
+                          auto_commit=True,
+                          **keywords):
+        """
+        Save data from a sheet to database
+
+        :param session: a SQLAlchemy session
+        :param table: a database table
+        :param initializer: a custom table initialization function if
+                            you have one
+        :param mapdict: the explicit table column names if your excel
+                        data do not have the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Sheet.save_to_database`
+        """
+        params = self.get_params(**keywords)
+        params['dest_session'] = session
+        params['dest_table'] = table
+        params['dest_initializer'] = initializer
+        params['dest_mapdict'] = mapdict
+        params['dest_auto_commit'] = auto_commit
+        pe.isave_as(**params)
+
     def get_book(self, **keywords):
         """Get a instance of :class:`Book` from the file
 
@@ -211,6 +235,31 @@ class ExcelInput(object):
         params['dest_mapdicts'] = mapdicts
         params['dest_auto_commit'] = auto_commit
         pe.save_book_as(**params)
+
+    def isave_book_to_database(self, session=None, tables=None,
+                               initializers=None, mapdicts=None,
+                               auto_commit=True, **keywords):
+        """
+        Save a book into database
+
+        :param session: a SQLAlchemy session
+        :param tables: a list of database tables
+        :param initializers: a list of model
+                             initialization functions.
+        :param mapdicts: a list of explicit table column names
+                         if your excel data sheets do not have
+                         the exact column names
+        :param keywords: additional keywords to
+                         :meth:`pyexcel.Book.save_to_database`
+
+        """
+        params = self.get_params(**keywords)
+        params['dest_session'] = session
+        params['dest_tables'] = tables
+        params['dest_initializers'] = initializers
+        params['dest_mapdicts'] = mapdicts
+        params['dest_auto_commit'] = auto_commit
+        pe.isave_book_as(**params)
 
     def free_resources(self):
         """

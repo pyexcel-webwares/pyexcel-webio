@@ -49,7 +49,7 @@ CLASSIFIERS = [
 ]
 
 INSTALL_REQUIRES = [
-    'pyexcel>=0.4.0',
+    'pyexcel>=0.6.0',
 ]
 
 

@@ -141,6 +141,18 @@ class TestExcelInput:
         assert array == self.data
         self.session.close()
 
+    def test_isave_to_database(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+        self.session = Session()
+        myinput = TestInput()
+        myinput.isave_to_database(file_name=self.testfile,
+                                  session=self.session,
+                                  table=Signature)
+        array = pe.get_array(session=self.session, table=Signature)
+        assert array == self.data
+        self.session.close()
+
     def tearDown(self):
         os.unlink(self.testfile)
 
@@ -221,6 +233,20 @@ class TestExcelInputOnBook(TestCase):
         myinput.save_book_to_database(file_name=self.testfile,
                                       session=self.session,
                                       tables=[Signature, Signature2])
+        array = pe.get_array(session=self.session, table=Signature)
+        self.assertEqual(array, self.data)
+        array = pe.get_array(session=self.session, table=Signature2)
+        assert array == self.data1
+        self.session.close()
+
+    def test_isave_to_database(self):
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+        self.session = Session()
+        myinput = TestInput()
+        myinput.isave_book_to_database(file_name=self.testfile,
+                                       session=self.session,
+                                       tables=[Signature, Signature2])
         array = pe.get_array(session=self.session, table=Signature)
         self.assertEqual(array, self.data)
         array = pe.get_array(session=self.session, table=Signature2)
