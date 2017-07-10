@@ -259,7 +259,7 @@ def dummy_func(content, content_type=None, status=200, file_name=None):
     return None
 
 
-ExcelResponse = dummy_func
+__excel_response_func__ = dummy_func
 
 
 def _make_response(content, file_type,
@@ -269,9 +269,15 @@ def _make_response(content, file_type,
     if file_name:
         if not file_name.endswith(file_type):
             file_name = "%s.%s" % (file_name, file_type)
-    return ExcelResponse(content,
-                         content_type=FILE_TYPE_MIME_TABLE[file_type],
-                         status=status, file_name=file_name)
+    return __excel_response_func__(
+        content,
+        content_type=FILE_TYPE_MIME_TABLE[file_type],
+        status=status, file_name=file_name)
+
+
+def init_webio(response_function):
+    global __excel_response_func__
+    __excel_response_func__ = response_function
 
 
 def make_response(pyexcel_instance, file_type,

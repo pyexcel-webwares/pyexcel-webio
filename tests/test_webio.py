@@ -21,7 +21,7 @@ def dumpy_response(content, content_type=None, status=200, file_name=None):
         f.write(content)
 
 
-webio.ExcelResponse = dumpy_response
+webio.init_webio(dumpy_response)
 
 
 class TestExceptions:
