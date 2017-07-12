@@ -174,7 +174,7 @@ class ExcelInput(object):
                           auto_commit=True,
                           **keywords):
         """
-        Save data from a sheet to database
+        Save large data from a sheet to database
 
         :param session: a SQLAlchemy session
         :param table: a database table
@@ -240,7 +240,7 @@ class ExcelInput(object):
                                initializers=None, mapdicts=None,
                                auto_commit=True, **keywords):
         """
-        Save a book into database
+        Save a large book into database
 
         :param session: a SQLAlchemy session
         :param tables: a list of database tables
