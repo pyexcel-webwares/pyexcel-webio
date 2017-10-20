@@ -8,11 +8,26 @@ pyexcel-webio - Let you focus on data, instead of file formats
 .. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.svg?branch=master
    :target: http://travis-ci.org/pyexcel/pyexcel-webio
 
-.. image:: https://codecov.io/github/pyexcel/pyexcel-webio/coverage.png
-   :target: https://codecov.io/github/pyexcel/pyexcel-webio
+.. image:: https://codecov.io/gh/pyexcel/pyexcel-webio/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/pyexcel/pyexcel-webio
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
+
+
+Support the project
+================================================================================
+
+If your company has embedded pyexcel and its components into a revenue generating
+product, please `support me on patreon <https://www.patreon.com/bePatron?u=5537627>`_ to
+maintain the project and develop it further.
+
+If you are an individual, you are welcome to support me too on patreon and for however long
+you feel like. As a patreon, you will receive
+`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
+
+With your financial support, I will be able to invest
+a little bit more time in coding, documentation and writing interesting posts.
 
 
 Known constraints
@@ -20,13 +35,16 @@ Known constraints
 
 Fonts, colors and charts are not supported.
 
+Introduction
+================================================================================
 **pyexcel-webio** is a tiny interface library to unify the web extensions that uses `pyexcel <https://github.com/pyexcel/pyexcel>`__ . You may use it to write a web extension for your faviourite Python web framework.
 
 
 
 Installation
 ================================================================================
-You can install it via pip:
+
+You can install pyexcel-webio via pip:
 
 .. code-block:: bash
 
@@ -119,21 +137,6 @@ This small section outlines the steps to adapt **pyexcel-webio** for your favour
         make_response_from_book_dict
     )
 
-Support the project
-================================================================================
-
-If your company has embedded pyexcel and its components into a revenue generating
-product, please `support me on patreon <https://www.patreon.com/bePatron?u=5537627>`_ to
-maintain the project and develop it further.
-
-If you are an individual, you are welcome to support me too on patreon and for however long
-you feel like to. As a patreon, you will receive
-`early access to pyexcel related contents <https://www.patreon.com/pyexcel/posts>`_.
-
-With your financial support, I will be able to invest
-a little bit more time in coding, documentation and writing interesting posts.
-
-
 Development guide
 ================================================================================
 
@@ -158,9 +161,9 @@ and update CHANGELOG.rst.
 .. note::
 
     As to rnd_requirements.txt, usually, it is created when a dependent
-	library is not released. Once the dependecy is installed
-	(will be released), the future
-	version of the dependency in the requirements.txt will be valid.
+    library is not released. Once the dependecy is installed
+    (will be released), the future
+    version of the dependency in the requirements.txt will be valid.
 
 
 How to test your contribution
@@ -182,6 +185,7 @@ How to update test environment and update documentation
 Additional steps are required:
 
 #. pip install moban
+#. git clone https://github.com/moremoban/setupmobans.git # generic setup
 #. git clone https://github.com/pyexcel/pyexcel-commons.git commons
 #. make your changes in `.moban.d` directory, then issue command `moban`
 
@@ -202,6 +206,8 @@ Acceptance criteria
 #. Has all code lines tested
 #. Passes all Travis CI builds
 #. Has fair amount of documentation if your change is complex
+#. Please update CHANGELOG.rst
+#. Please add yourself to CONTRIBUTORS.rst
 #. Agree on NEW BSD License for your contribution
 
 
