@@ -5,11 +5,11 @@ pyexcel-webio - Let you focus on data, instead of file formats
 .. image:: https://raw.githubusercontent.com/pyexcel/pyexcel.github.io/master/images/patreon.png
    :target: https://www.patreon.com/pyexcel
 
-.. image:: https://api.travis-ci.org/pyexcel/pyexcel-webio.svg?branch=master
-   :target: http://travis-ci.org/pyexcel/pyexcel-webio
+.. image:: https://api.travis-ci.org/pyexcel-webwares/pyexcel-webio.svg?branch=master
+   :target: http://travis-ci.org/pyexcel-webwares/pyexcel-webio
 
-.. image:: https://codecov.io/gh/pyexcel/pyexcel-webio/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/pyexcel/pyexcel-webio
+.. image:: https://codecov.io/gh/pyexcel-webwares/pyexcel-webio/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/pyexcel-webwares/pyexcel-webio
 
 .. image:: https://img.shields.io/gitter/room/gitterHQ/gitter.svg
    :target: https://gitter.im/pyexcel/Lobby
@@ -55,7 +55,7 @@ or clone it and install it:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/pyexcel/pyexcel-webio.git
+    $ git clone https://github.com/pyexcel-webwares/pyexcel-webio.git
     $ cd pyexcel-webio
     $ python setup.py install
 

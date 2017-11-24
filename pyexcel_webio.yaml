@@ -1,5 +1,6 @@
 overrides: "pyexcel.yaml"
 name: "pyexcel-webio"
+organisation: pyexcel-webwares
 nick_name: webio
 version: "0.1.4"
 current_version: "0.1.4"

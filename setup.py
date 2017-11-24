@@ -14,7 +14,7 @@ DESCRIPTION = (
     'A generic request and response interface for pyexcel web extensions.' +
     ''
 )
-URL = 'https://github.com/pyexcel/pyexcel-webio'
+URL = 'https://github.com/pyexcel-webwares/pyexcel-webio'
 DOWNLOAD_URL = '%s/archive/0.1.4.tar.gz' % URL
 FILES = ['README.rst',  'CHANGELOG.rst']
 KEYWORDS = [
@@ -63,7 +63,8 @@ GS_COMMAND = ('gs pyexcel-webio v0.1.4 ' +
               "Find 0.1.4 in changelog for more details")
 NO_GS_MESSAGE = ('Automatic github release is disabled. ' +
                  'Please install gease to enable it.')
-UPLOAD_FAILED_MSG = ('Upload failed. please run "%s" yourself.')
+UPLOAD_FAILED_MSG = (
+    'Upload failed. please run "%s" yourself.' % PUBLISH_COMMAND)
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 
